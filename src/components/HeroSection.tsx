@@ -5,7 +5,7 @@ import { ChevronDown } from "lucide-react";
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-screen md:h-[750px] flex items-center justify-center overflow-hidden bg-primary">
+    <section className="relative h-[85vh] md:h-[80vh] sm:h-[100vh] flex items-center justify-center overflow-hidden bg-primary">
       {/* Background Image */}
       <div className="absolute inset-0 -z-10">
         <Image

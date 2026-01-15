@@ -24,9 +24,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className="scroll-smooth">
+    <html lang="pt-BR" className="scroll-smooth overflow-x-hidden">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-white text-gray-900 antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} bg-white text-gray-900 antialiased overflow-x-hidden`}
       >
         <Navigation />
         {children}
