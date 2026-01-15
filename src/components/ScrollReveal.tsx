@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, ReactNode } from "react";
+import { useEffect, useRef, ReactNode, useState } from "react";
 
 interface ScrollRevealProps {
   children: ReactNode;
@@ -14,23 +14,19 @@ export function ScrollReveal({
   delay = 0,
 }: ScrollRevealProps) {
   const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          // Aplica a classe de animação
-          entry.target.classList.add("animate-in");
-          // Remove a classe de fora da tela
-          entry.target.classList.remove("opacity-0");
-
-          // Anima a saída se sair da tela novamente
-          return;
+          setIsVisible(true);
+          observer.unobserve(entry.target);
         }
       },
       {
         threshold: 0.1,
-        rootMargin: "0px 0px -100px 0px",
+        rootMargin: "0px 0px -50px 0px",
       }
     );
 
@@ -45,18 +41,28 @@ export function ScrollReveal({
     };
   }, []);
 
-  const directionClass = {
-    left: "slide-in-from-left-96",
-    right: "slide-in-from-right-96",
-    up: "slide-in-from-bottom-96",
-    down: "slide-in-from-top-96",
-  }[direction];
+  const getTransformClass = () => {
+    if (isVisible) return "";
+
+    switch (direction) {
+      case "left":
+        return "-translate-x-24";
+      case "right":
+        return "translate-x-24";
+      case "up":
+        return "translate-y-24";
+      case "down":
+        return "-translate-y-24";
+      default:
+        return "";
+    }
+  };
 
   return (
     <div
       ref={ref}
-      className={`opacity-0 ${directionClass} duration-700 transition-all`}
-      style={{ transitionDelay: `${delay}ms` }}
+      className={`${getTransformClass()} ${isVisible ? "opacity-100" : "opacity-0"} duration-700 transition-all`}
+      style={{ transitionDelay: isVisible ? `${delay}ms` : "0ms" }}
     >
       {children}
     </div>
