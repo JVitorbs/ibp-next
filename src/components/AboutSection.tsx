@@ -36,17 +36,17 @@ export default function AboutSection() {
         <div className="grid md:grid-cols-2 gap-8 items-center mb-12">
           {/* Card esquerdo */}
           <ScrollReveal direction="left">
-            <Card className="bg-white/95 backdrop-blur shadow-xl">
+            <Card className="bg-gray-800/40 shadow-xl">
               <CardHeader>
-                <CardTitle className="text-2xl">Nossa História</CardTitle>
+                <CardTitle className="text-2xl text-white">Nossa História</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-lg leading-relaxed">
+                <p className="text-white text-lg leading-relaxed">
                   Somos uma comunidade de fé dedicada a servir a Deus e aos nossos
                   próximos. Fundada em 1995, nossa igreja tem sido um lugar de
                   adoração, comunhão e crescimento espiritual.
                 </p>
-                <p className="text-lg leading-relaxed">
+                <p className="text-white text-lg leading-relaxed">
                   Acreditamos na mensagem do Evangelho e no poder transformador de
                   Jesus Cristo. Aqui você encontrará um ambiente acolhedor onde
                   possa encontrar esperança, paz e comunidade.
@@ -57,15 +57,15 @@ export default function AboutSection() {
 
           {/* Espaço vazio ou outro card */}
           <ScrollReveal direction="right">
-            <Card className="bg-white/95 backdrop-blur shadow-xl">
+            <Card className="bg-gray-800/40 shadow-xl">
               <CardHeader>
-                <CardTitle className="text-2xl">Bem-vindo</CardTitle>
+                <CardTitle className="text-2xl text-white">Bem-vindo</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-lg leading-relaxed">
+                <p className="text-white text-lg leading-relaxed">
                   Você é bem-vindo em nossa comunidade. Somos uma família em Cristo, unida pelo amor e pela missão de compartilhar o Evangelho.
                 </p>
-                <p className="text-lg leading-relaxed">
+                <p className="text-white text-lg leading-relaxed">
                   Visite-nos e sinta o acolhimento que existe em nosso meio. Queremos conhecer você e compartilhar essa jornada de fé juntos.
                 </p>
               </CardContent>
@@ -76,36 +76,36 @@ export default function AboutSection() {
         {/* Valores */}
         <div className="grid md:grid-cols-3 gap-6">
           <ScrollReveal direction="left" delay={0}>
-            <Card className="bg-white/95 backdrop-blur shadow-xl">
+            <Card className="bg-gray-800/40 shadow-xl">
               <CardHeader>
                 <Heart className="h-8 w-8 mb-2 text-red-500" />
-                <CardTitle>Amor e Compaixão</CardTitle>
+                <CardTitle className="text-white">Amor e Compaixão</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="text-white">
                 Dedicados ao amor e compaixão ao próximo, seguindo o exemplo de Jesus Cristo.
               </CardContent>
             </Card>
           </ScrollReveal>
 
           <ScrollReveal direction="up" delay={100}>
-            <Card className="bg-white/95 backdrop-blur shadow-xl">
+            <Card className="bg-gray-800/40 shadow-xl">
               <CardHeader>
                 <BookOpen className="h-8 w-8 mb-2 text-blue-500" />
-                <CardTitle>Fidelidade à Palavra</CardTitle>
+                <CardTitle className="text-white">Fidelidade à Palavra</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="text-white">
                 Baseados em princípios bíblicos sólidos e na verdade da Palavra de Deus.
               </CardContent>
             </Card>
           </ScrollReveal>
 
           <ScrollReveal direction="right" delay={200}>
-            <Card className="bg-white/95 backdrop-blur shadow-xl">
+            <Card className="bg-gray-800/40 shadow-xl">
               <CardHeader>
                 <Users className="h-8 w-8 mb-2 text-green-500" />
-                <CardTitle>Comunidade</CardTitle>
+                <CardTitle className="text-white">Comunidade</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="text-white">
                 Cultivando relacionamentos profundos baseados em comunidade e fraternidade genuína.
               </CardContent>
             </Card>
