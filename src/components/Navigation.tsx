@@ -22,11 +22,17 @@ export default function Navigation() {
           <Link href="/#missao">
             <Button variant="ghost">Missão</Button>
           </Link>
+          <Link href="/pg">
+            <Button variant="ghost">PG</Button>
+          </Link>
+          <Link href="/instituto-biblico">
+            <Button variant="ghost">Instituto Bíblico</Button>
+          </Link>
           <Link href="/#contato">
             <Button variant="ghost">Contato</Button>
           </Link>
-          <Link href="/galeria">
-            <Button variant="ghost">Galeria</Button>
+          <Link href="/historia">
+            <Button variant="ghost">História</Button>
           </Link>
         </div>
 
@@ -49,14 +55,24 @@ export default function Navigation() {
                   Missão
                 </Button>
               </Link>
+              <Link href="/pg">
+                <Button variant="ghost" className="w-full justify-start">
+                  PG
+                </Button>
+              </Link>
+              <Link href="/instituto-biblico">
+                <Button variant="ghost" className="w-full justify-start">
+                  Instituto Bíblico
+                </Button>
+              </Link>
               <Link href="/#contato">
                 <Button variant="ghost" className="w-full justify-start">
                   Contato
                 </Button>
               </Link>
-              <Link href="/galeria">
+              <Link href="/historia">
                 <Button variant="ghost" className="w-full justify-start">
-                  Galeria
+                  História
                 </Button>
               </Link>
             </div>

@@ -35,8 +35,8 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/galeria" className="text-muted-foreground hover:foreground transition">
-                  Galeria
+                <Link href="/historia" className="text-muted-foreground hover:foreground transition">
+                  História
                 </Link>
               </li>
             </ul>
