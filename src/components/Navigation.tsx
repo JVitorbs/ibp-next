@@ -28,6 +28,9 @@ export default function Navigation() {
           <Link href="/instituto-biblico">
             <Button variant="ghost">Instituto Bíblico</Button>
           </Link>
+          <Link href="/diretoria">
+            <Button variant="ghost">Diretoria</Button>
+          </Link>
           <Link href="/#contato">
             <Button variant="ghost">Contato</Button>
           </Link>
@@ -63,6 +66,11 @@ export default function Navigation() {
               <Link href="/instituto-biblico">
                 <Button variant="ghost" className="w-full justify-start">
                   Instituto Bíblico
+                </Button>
+              </Link>
+              <Link href="/diretoria">
+                <Button variant="ghost" className="w-full justify-start">
+                  Diretoria
                 </Button>
               </Link>
               <Link href="/#contato">
