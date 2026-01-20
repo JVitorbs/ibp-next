@@ -34,7 +34,7 @@ export default function InstitutoBiblicoPage() {
               <div className="text-muted-foreground space-y-2">
                 <p><strong>Quando:</strong> Todos os domingos</p>
                 <p><strong>Horário:</strong> 9h00</p>
-                <p><strong>Local:</strong> Igreja Batista do Planalto</p>
+                <p><strong>Local:</strong> Igreja Batista do Pirangi</p>
               </div>
             </div>
 
@@ -46,11 +46,15 @@ export default function InstitutoBiblicoPage() {
                   <p>Ensino bíblico adaptado para cada faixa etária, com atividades lúdicas e educativas.</p>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground mb-1">Adolescentes</h3>
-                  <p>Estudo relevante para os desafios da adolescência à luz da Bíblia.</p>
+                  <h3 className="font-semibold text-foreground mb-1">Novos membros</h3>
+                  <p>Estudo relevante para os interessados em se tornar membros da igreja.</p>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground mb-1">Jovens e Adultos</h3>
+                  <h3 className="font-semibold text-foreground mb-1">Jovens</h3>
+                  <p>Estudo aprofundado das Escrituras com aplicações práticas para a juventude.</p>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-1">Geral</h3>
                   <p>Estudo aprofundado das Escrituras com aplicações práticas para a vida.</p>
                 </div>
               </div>
