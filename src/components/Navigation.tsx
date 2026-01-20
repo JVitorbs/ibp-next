@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -10,7 +11,14 @@ export default function Navigation() {
   return (
     <nav className="sticky top-0 z-50 bg-background border-b border-foreground/10 shadow-sm">
       <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-        <Link href="/" className="font-bold text-2xl text-foreground">
+        <Link href="/" className="font-bold text-2xl text-foreground flex items-center gap-2">
+          <Image
+            src="/logos_Ibp/logo_redonda.png"
+            alt="Logo Igreja Batista do Pirangi"
+            width={40}
+            height={40}
+            className="drop-shadow-lg"
+          />
           IBP
         </Link>
 
