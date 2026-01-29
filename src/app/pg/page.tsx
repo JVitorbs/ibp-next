@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function PGPage() {
   return (
     <main className="min-h-screen">
-      <section className="py-20 px-4 bg-gradient-to-b from-background to-muted/20">
+      <section className="py-20 px-4 bg-primary/20 from-background to-muted/20">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
             Pequenos Grupos
