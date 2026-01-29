@@ -43,7 +43,7 @@ export default function AboutSection() {
               <CardContent className="space-y-4">
                 <p className="text-white text-lg leading-relaxed">
                   Somos uma comunidade de fé dedicada a servir a Deus e aos nossos
-                  próximos. Fundada em 1995, nossa igreja tem sido um lugar de
+                  próximos. Fundada em 1983, nossa igreja tem sido um lugar de
                   adoração, comunhão e crescimento espiritual.
                 </p>
                 <p className="text-white text-lg leading-relaxed">
@@ -63,10 +63,10 @@ export default function AboutSection() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-white text-lg leading-relaxed">
-                  Você é bem-vindo em nossa comunidade. Somos uma família em Cristo, unida pelo amor e pela missão de compartilhar o Evangelho.
+                  Nós somos a IBP. Uma igreja comprometida com o Reino de Deus, empenhada em alcançar pessoas e ajudá-las a terem um relacionamento crescente com Jesus.
                 </p>
                 <p className="text-white text-lg leading-relaxed">
-                  Visite-nos e sinta o acolhimento que existe em nosso meio. Queremos conhecer você e compartilhar essa jornada de fé juntos.
+                  Vem ser igreja com a gente e experimentar o novo de Deus na sua vida.
                 </p>
               </CardContent>
             </Card>
