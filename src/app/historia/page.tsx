@@ -18,56 +18,56 @@ export default function Historia() {
       title: "Fundação da Igreja",
       description: "Início da Igreja Batista do Planalto com um pequeno grupo de irmãos comprometidos com a fé e a missão de servir a comunidade.",
       type: "foundation",
-      image: "/images/fundacao-1983.jpg",
+      image: "/images/historia/fundacao-1983.jpg",
     },
     {
       year: "1990",
       title: "Primeira Sede Própria",
       description: "Aquisição do primeiro terreno e construção do templo, marco importante de crescimento e consolidação da congregação.",
       type: "milestone",
-      image: "/images/sede-1990.jpg",
+      image: "/images/historia/sede-1990.jpg",
     },
     {
       year: "1995",
       title: "Instituto Bíblico",
       description: "Implementação formal da Escola Bíblica Dominical, estruturando o ensino sistemático da Palavra de Deus para todas as idades.",
       type: "achievement",
-      image: "/images/instituto-1995.jpg",
+      image: "/images/historia/instituto-1995.jpg",
     },
     {
       year: "2005",
       title: "Reforma e Ampliação",
       description: "Grande reforma do templo com ampliação das instalações para acomodar o crescimento da igreja e novos ministérios.",
       type: "reform",
-      image: "/images/reforma-2005.jpg",
+      image: "/images/historia/reforma-2005.jpg",
     },
     {
       year: "2010",
       title: "Ministério de Pequenos Grupos",
       description: "Início oficial dos Pequenos Grupos, fortalecendo a comunhão e o cuidado pastoral através de células nas casas.",
       type: "achievement",
-      image: "/images/pequenos-grupos-2010.jpg",
+      image: "/images/historia/pequenos-grupos-2010.jpg",
     },
     {
-      year: "2015",
+      year: "2013",
       title: "30 Anos de História",
       description: "Celebração de três décadas de ministério, testemunhando a fidelidade de Deus e o impacto na comunidade local.",
       type: "milestone",
-      image: "/images/30anos-2015.jpg",
+      image: "/images/historia/30anos-2013.jpg",
     },
     {
       year: "2020",
       title: "Modernização Digital",
       description: "Adaptação aos novos tempos com transmissões online, site moderno e fortalecimento da presença digital da igreja.",
       type: "reform",
-      image: "/images/digital-2020.jpg",
+      image: "/images/historia/cultos_pandemia.png",
     },
     {
-      year: "2025",
+      year: "2023",
       title: "40 Anos de Fé",
       description: "Comemorando quatro décadas de história, com uma comunidade vibrante e comprometida em fazer a diferença.",
       type: "milestone",
-      image: "/images/40anos-2025.jpg",
+      image: "/images/historia/40anos-2023.png",
     },
   ];
 
@@ -139,18 +139,26 @@ export default function Historia() {
 
                   {/* Conteúdo do evento */}
                   <div
-                    className={`ml-16 md:ml-0 md:w-5/12 ${
-                      index % 2 === 0 ? "md:pr-12 md:text-right" : "md:pl-12"
+                    className={`ml-8 md:ml-0 flex flex-col items-start md:items-stretch md:w-5/12 ${
+                      index % 2 === 0 ? "md:pr-4 md:items-end" : "md:pl-4 md:items-start"
                     }`}
                   >
                     {/* Ano */}
-                    <div className="inline-block px-4 py-1 rounded-full bg-primary text-primary-foreground font-bold text-sm mb-3">
+                    <div
+                      className="inline-block px-4 py-1 rounded-full bg-primary text-primary-foreground font-bold text-sm mb-3 md:mb-4"
+                      style={{
+                        alignSelf: index % 2 === 0 ? 'flex-end' : 'flex-start',
+                      }}
+                    >
                       {event.year}
                     </div>
 
                     {/* Card do evento */}
                     <div
-                      className={`bg-card border overflow-hidden rounded-lg shadow-lg transform transition-all hover:scale-105`}
+                      className={`bg-card border overflow-hidden rounded-lg shadow-lg transform transition-all hover:scale-105 w-full max-w-md md:max-w-xl md:w-[420px] lg:w-[600px] xl:w-[600px]`}
+                      style={{
+                        alignSelf: index % 2 === 0 ? 'flex-end' : 'flex-start',
+                      }}
                     >
                       {/* Imagem */}
                       {event.image && (
