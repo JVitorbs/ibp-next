@@ -14,11 +14,11 @@ interface TimelineEvent {
 export default function Historia() {
   const events: TimelineEvent[] = [
     {
-      year: "1985",
+      year: "1983",
       title: "Fundação da Igreja",
       description: "Início da Igreja Batista do Planalto com um pequeno grupo de irmãos comprometidos com a fé e a missão de servir a comunidade.",
       type: "foundation",
-      image: "/images/fundacao-1985.jpg",
+      image: "/images/fundacao-1983.jpg",
     },
     {
       year: "1990",
