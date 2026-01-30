@@ -143,7 +143,7 @@ export default function DiretoriaPage() {
             </ScrollReveal>
             <ScrollReveal direction="up" delay={200}>
               <p className="text-lg text-muted-foreground">
-                Conheça a liderança que serve e conduz a Igreja Batista do Planalto.
+                Conheça a liderança que serve e conduz a Igreja Batista do Pirangi.
               </p>
             </ScrollReveal>
           </div>
