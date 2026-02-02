@@ -68,7 +68,14 @@ export default function ContactSection() {
                   <p className="text-muted-foreground">18:00 - Culto Domingo</p>
                 </div>
                 <Button className="w-full mt-4 h-12 text-base">
-                  Nos Visite
+                  <a
+                    href="https://share.google/FkjcJEuBwCKcCdaeJ"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center w-full h-full"
+                  >
+                    Nos Visite
+                  </a>
                 </Button>
               </CardContent>
             </Card>
