@@ -14,8 +14,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "IBP - Igreja Batista da Paz",
+  title: "IBP - Igreja Batista do Pirangi",
   description: "Bem-vindo à Nossa Comunidade",
+  icons: {
+    icon: "/logos_Ibp/logo_redonda.png",
+  },
 };
 
 export default function RootLayout({

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -10,9 +11,18 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto px-4">
         <div className="grid md:grid-cols-3 gap-8 mb-8">
           <div>
-            <h3 className="font-bold text-lg mb-4">IBP</h3>
+            <h3 className="font-bold text-foreground flex items-center gap-2">
+              <Image
+                src="/logos_Ibp/logo_redonda.png"
+                alt="Logo Igreja Batista do Pirangi"
+                width={30}
+                height={30}
+                className="drop-shadow-lg"
+              />
+              IBP
+              </h3>
             <p className="text-muted-foreground">
-              Igreja Batista do Pirangi - Uma comunidade de fé ao seu alcance
+              Igreja Batista do Pirangi - Bíblica, Integral e Relevante
             </p>
           </div>
 
@@ -44,21 +54,18 @@ export default function Footer() {
 
           <div>
             <h4 className="font-semibold mb-4">Contato</h4>
-            <p className="text-muted-foreground text-sm mb-2">
-              📞 (XX) XXXX-XXXX
-            </p>
             <p className="text-muted-foreground text-sm">
-              ✉️ contato@ibp.com.br
+              ✉️ somosibp@gmail.com
             </p>
           </div>
         </div>
 
         <div className="border-t pt-8 text-center">
           <p className="text-muted-foreground text-sm">
-            © {currentYear} Igreja Batista do Pirangi. Todos os direitos reservados.
+            © {currentYear} Igreja Batista do Pirangi. Bíblica, Integral e Relevante.
           </p>
           <p className="text-muted-foreground text-sm mt-2">
-            Desenvolvido com ❤️ para a comunidade
+            Desenvolvido com amor para a comunidade
           </p>
         </div>
       </div>

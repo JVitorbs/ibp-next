@@ -1,36 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# IBP Next - Igreja Batista do Pirangi
 
-## Getting Started
+## Visão Geral
 
-First, run the development server:
+Este projeto é o site institucional da Igreja Batista do Pirangi, desenvolvido com Next.js e React. O objetivo é apresentar informações sobre a igreja, sua história, missão, ministérios, pequenos grupos, Instituto Bíblico, contatos e programação, servindo como ponto de acolhimento, divulgação e comunicação para membros, visitantes e interessados.
+
+## Funcionalidades
+
+- **Página inicial**: Apresentação da igreja, missão, valores e convite à comunidade.
+- **História**: Linha do tempo interativa com marcos históricos e imagens.
+- **Pequenos Grupos**: Explicação, benefícios e como participar dos PGs.
+- **Instituto Bíblico**: Informações sobre a Escola Bíblica Dominical, horários e classes.
+- **Contato**: Endereço, e-mail, horários de culto e link para localização no Google Maps.
+- **Footer**: Links rápidos e informações institucionais.
+
+## Público-alvo
+
+- Membros da igreja
+- Visitantes e interessados
+- Comunidade local
+
+## Como rodar o projeto
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+Acesse [http://localhost:3000](http://localhost:3000) no navegador.
+
+## Estrutura de Pastas
+
+```
+ibp-next/
+├── public/
+│   └── images/           # Imagens institucionais e linha do tempo
+├── src/
+│   ├── app/              # Páginas (historia, pg, instituto-biblico, etc)
+│   ├── components/       # Componentes reutilizáveis (HeroSection, Footer, etc)
+│   ├── lib/              # Funções utilitárias
+│   └── styles/           # Estilos globais
+├── package.json          # Dependências e scripts
+├── tsconfig.json         # Configuração TypeScript
+├── tailwind.config.js    # Configuração Tailwind
+├── README.md             # Documentação
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Principais Componentes
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `HeroSection`: Banner principal com imagem e chamada.
+- `AboutSection`: Sobre a igreja, valores e acolhimento.
+- `MissionSection`: Missão institucional.
+- `ScrollReveal`: Animação de entrada dos elementos ao rolar.
+- `ContactSection`: Informações de contato e botão para Google Maps.
+- `Footer`: Rodapé institucional.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Scripts
 
-## Learn More
+- `npm run dev`: Inicia o servidor de desenvolvimento.
+- `npm run build`: Gera a build de produção.
+- `npm run start`: Inicia o servidor em produção.
+- `npm run lint`: Verifica padrões de código.
 
-To learn more about Next.js, take a look at the following resources:
+## Tecnologias Utilizadas
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Next.js** (React, SSR/SSG)
+- **TypeScript**
+- **TailwindCSS** (estilização)
+- **Lucide React** (ícones)
+- **Radix UI** (componentes acessíveis)
+- **ESLint** (padronização de código)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deploy
 
-## Deploy on Vercel
+Recomenda-se o deploy na Vercel para melhor performance e integração com Next.js.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Contribuição
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Sugestões e melhorias são bem-vindas!
+
+---
+
+## Diagrama de Fluxo
+
+```mermaid
+flowchart TD
+    A[Usuário acessa site] --> B[Home]
+    B --> C[Sobre]
+    B --> D[Missão]
+    B --> E[História]
+    B --> F[Pequenos Grupos]
+    B --> G[Instituto Bíblico]
+    B --> H[Contato]
+    H --> I[Google Maps]
+    E --> J[Linha do Tempo]
+    F --> K[Como Participar]
+    G --> L[Classes Disponíveis]
+    B --> M[Footer]
+```
