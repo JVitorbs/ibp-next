@@ -18,7 +18,7 @@ export default function Historia() {
     {
       year: "1983",
       title: "Fundação da Igreja",
-      description: "Início da Igreja Batista do Planalto com um pequeno grupo de irmãos comprometidos com a fé e a missão de servir a comunidade.",
+      description: "Início da Igreja Batista do Pirangi com um pequeno grupo de irmãos comprometidos com a fé e a missão de servir a comunidade.",
       type: "foundation",
       image: "/images/historia/fundacao-1983.jpg",
     },
@@ -46,7 +46,7 @@ export default function Historia() {
     {
       year: "2020",
       title: "Modernização Digital",
-      description: "Adaptação aos novos tempos com transmissões online, site moderno e fortalecimento da presença digital da igreja.",
+      description: "Adaptação aos novos tempos com transmissões online.",
       type: "reform",
       image: "/images/historia/cultos_pandemia.png",
     },
@@ -91,7 +91,15 @@ export default function Historia() {
 
   return (
     <>
-      <main className="min-h-screen pt-6 px-4 pb-20 bg-gradient-to-b from-background to-muted/20">
+      <main
+        className="min-h-screen pt-6 px-4 pb-20 relative bg-primary/40"
+        style={{
+          backgroundImage: "url('/images/paper-texture.jpeg')",
+          backgroundBlendMode: "multiply",
+          backgroundSize: "cover",
+          backgroundRepeat: "repeat"
+        }}
+      >
         <div className="max-w-4xl mx-auto">
           <ScrollReveal direction="down">
             <h1 className="text-4xl md:text-5xl font-bold text-center mb-4 text-foreground">
@@ -143,7 +151,7 @@ export default function Historia() {
 
                     {/* Card do evento */}
                     <div
-                      className={`bg-card border overflow-hidden rounded-lg shadow-lg transform transition-all hover:scale-105 w-full max-w-md md:max-w-xl md:w-[420px] lg:w-[600px] xl:w-[600px]`}
+                      className={`bg-card border border-primary overflow-hidden rounded-lg shadow-lg shadow-primary/30 shadow-b-2xl transform transition-all hover:scale-105 w-full max-w-md md:max-w-xl md:w-[420px] lg:w-[600px] xl:w-[600px]`}
                       style={{
                         alignSelf: index % 2 === 0 ? 'flex-end' : 'flex-start',
                       }}
