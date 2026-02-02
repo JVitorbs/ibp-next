@@ -13,30 +13,33 @@ export function Carousel({ images, alt, fallbackBg, fallbackIcon }: CarouselProp
   const [slideDirection, setSlideDirection] = useState<'left' | 'right' | null>(null);
   const [isSliding, setIsSliding] = useState(false);
   const [nextIndex, setNextIndex] = useState<number | null>(null);
+  const [slideOffset, setSlideOffset] = useState(0);
+  const [showTransition, setShowTransition] = useState(false);
+  const [transitionImages, setTransitionImages] = useState<{from: number, to: number, direction: 'left'|'right'}|null>(null);
   const touchStartX = useRef<number | null>(null);
 
   const handlePrev = () => {
     if (isSliding) return;
-    setSlideDirection('left');
-    setNextIndex(current === 0 ? images.length - 1 : current - 1);
+    if (isSliding) return;
+    const toIndex = current === 0 ? images.length - 1 : current - 1;
+    setTransitionImages({from: current, to: toIndex, direction: 'left'});
     setIsSliding(true);
     setTimeout(() => {
-      setCurrent((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+      setCurrent(toIndex);
       setIsSliding(false);
-      setSlideDirection(null);
-      setNextIndex(null);
+      setTransitionImages(null);
     }, 500);
   };
   const handleNext = () => {
     if (isSliding) return;
-    setSlideDirection('right');
-    setNextIndex(current === images.length - 1 ? 0 : current + 1);
+    if (isSliding) return;
+    const toIndex = current === images.length - 1 ? 0 : current + 1;
+    setTransitionImages({from: current, to: toIndex, direction: 'right'});
     setIsSliding(true);
     setTimeout(() => {
-      setCurrent((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+      setCurrent(toIndex);
       setIsSliding(false);
-      setSlideDirection(null);
-      setNextIndex(null);
+      setTransitionImages(null);
     }, 500);
   };
 
@@ -65,77 +68,64 @@ export function Carousel({ images, alt, fallbackBg, fallbackIcon }: CarouselProp
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Camada das imagens com slide real */}
-      <div className="absolute inset-0 w-full h-full z-10">
-        {/* Slide container */}
-        <div className="w-full h-full relative">
-          {/* Imagem atual */}
-          {(!isSliding || nextIndex === null) && (
-            errorIndexes.includes(current) ? (
-              <div
-                className={`absolute w-full h-full bg-linear-to-br ${fallbackBg} flex items-center justify-center transition-transform duration-500`}
-                style={{ transform: 'translateX(0)' }}
-              >
+      {/* Galeria deslizante suave */}
+      <div className="absolute inset-0 w-full h-full z-10 flex items-center">
+        {transitionImages ? (
+          <div
+            className="w-full h-full flex"
+            style={{
+              width: '200%',
+              transform: `translateX(${transitionImages.direction === 'left' ? 0 : -100}%)`,
+              transition: 'transform 0.5s cubic-bezier(0.4,0,0.2,1)',
+            }}
+          >
+            {/* Imagem atual */}
+            <div className="w-1/2 h-full flex items-center justify-center">
+              {errorIndexes.includes(transitionImages.from) ? (
+                <div className={`w-full h-full bg-linear-to-br ${fallbackBg} flex items-center justify-center`}>
+                  <span className="text-6xl">{fallbackIcon}</span>
+                </div>
+              ) : (
+                <img
+                  src={images[transitionImages.from]}
+                  alt={alt}
+                  className="w-full h-full object-cover"
+                  onError={() => handleError(transitionImages.from)}
+                />
+              )}
+            </div>
+            {/* Imagem seguinte */}
+            <div className="w-1/2 h-full flex items-center justify-center">
+              {errorIndexes.includes(transitionImages.to) ? (
+                <div className={`w-full h-full bg-linear-to-br ${fallbackBg} flex items-center justify-center`}>
+                  <span className="text-6xl">{fallbackIcon}</span>
+                </div>
+              ) : (
+                <img
+                  src={images[transitionImages.to]}
+                  alt={alt}
+                  className="w-full h-full object-cover"
+                  onError={() => handleError(transitionImages.to)}
+                />
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            {errorIndexes.includes(current) ? (
+              <div className={`w-full h-full bg-linear-to-br ${fallbackBg} flex items-center justify-center`}>
                 <span className="text-6xl">{fallbackIcon}</span>
               </div>
             ) : (
               <img
                 src={images[current]}
                 alt={alt}
-                className="absolute w-full h-full object-cover transition-transform duration-500"
-                style={{ transform: 'translateX(0)' }}
+                className="w-full h-full object-cover"
                 onError={() => handleError(current)}
               />
-            )
-          )}
-          {/* Transição: renderiza ambas as imagens */}
-          {isSliding && nextIndex !== null && (
-            <>
-              {/* Imagem atual saindo */}
-              {errorIndexes.includes(current) ? (
-                <div
-                  className={`absolute w-full h-full bg-linear-to-br ${fallbackBg} flex items-center justify-center transition-transform duration-500`}
-                  style={{
-                    transform: slideDirection === 'left'
-                      ? 'translateX(-100%)'
-                      : 'translateX(100%)'
-                  }}
-                >
-                  <span className="text-6xl">{fallbackIcon}</span>
-                </div>
-              ) : (
-                <img
-                  src={images[current]}
-                  alt={alt}
-                  className="absolute w-full h-full object-cover transition-transform duration-500"
-                  style={{
-                    transform: slideDirection === 'left'
-                      ? 'translateX(-100%)'
-                      : 'translateX(100%)'
-                  }}
-                  onError={() => handleError(current)}
-                />
-              )}
-              {/* Imagem seguinte entrando */}
-              {errorIndexes.includes(nextIndex) ? (
-                <div
-                  className={`absolute w-full h-full bg-linear-to-br ${fallbackBg} flex items-center justify-center transition-transform duration-500`}
-                  style={{ transform: 'translateX(0)' }}
-                >
-                  <span className="text-6xl">{fallbackIcon}</span>
-                </div>
-              ) : (
-                <img
-                  src={images[nextIndex]}
-                  alt={alt}
-                  className="absolute w-full h-full object-cover transition-transform duration-500"
-                  style={{ transform: 'translateX(0)' }}
-                  onError={() => handleError(nextIndex)}
-                />
-              )}
-            </>
-          )}
-        </div>
+            )}
+          </div>
+        )}
       </div>
       {/* Camada das setas e indicadores */}
       {images.length > 1 && (
