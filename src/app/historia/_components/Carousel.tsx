@@ -16,7 +16,7 @@ export function Carousel({ images, alt, fallbackBg, fallbackIcon }: CarouselProp
   const handleError = (idx: number) => setErrorIndexes((prev) => [...prev, idx]);
 
   return (
-    <div className="relative h-48 overflow-hidden flex items-center justify-center bg-black/10">
+    <div className="relative h-72 overflow-hidden flex items-center justify-center bg-black/10">
       {errorIndexes.includes(current) ? (
         <div className={`w-full h-full bg-gradient-to-br ${fallbackBg} flex items-center justify-center`}>
           <span className="text-6xl">{fallbackIcon}</span>

@@ -41,7 +41,7 @@ export default function Historia() {
       title: "30 Anos de História",
       description: "Celebração de três décadas de ministério, testemunhando a fidelidade de Deus e o impacto na comunidade local.",
       type: "milestone",
-      image: "/images/historia/30anos-2013.jpg",
+      image: "/images/historia/demolicao.jpg",
     },
     {
       year: "2020",
@@ -152,7 +152,7 @@ export default function Historia() {
                       {event.images && event.images.length > 0 ? (
                         <Carousel images={event.images} alt={event.title} fallbackBg={getEventColor(event.type)} fallbackIcon={getEventIcon(event.type)} />
                       ) : event.image ? (
-                        <div className="relative h-48 overflow-hidden">
+                        <div className="relative h-72 overflow-hidden">
                           <img
                             src={event.image}
                             alt={event.title}
