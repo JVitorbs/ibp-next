@@ -16,6 +16,7 @@ export function Carousel({ images, alt, fallbackBg, fallbackIcon }: CarouselProp
   const touchStartX = useRef<number | null>(null);
 
   const handlePrev = () => {
+    if (isSliding) return;
     setSlideDirection('left');
     setNextIndex(current === 0 ? images.length - 1 : current - 1);
     setIsSliding(true);
@@ -24,18 +25,19 @@ export function Carousel({ images, alt, fallbackBg, fallbackIcon }: CarouselProp
       setIsSliding(false);
       setSlideDirection(null);
       setNextIndex(null);
-    }, 350);
+    }, 500);
   };
   const handleNext = () => {
+    if (isSliding) return;
     setSlideDirection('right');
-    setNextIndex((current === images.length - 1 ? 0 : current + 1));
+    setNextIndex(current === images.length - 1 ? 0 : current + 1);
     setIsSliding(true);
     setTimeout(() => {
       setCurrent((prev) => (prev === images.length - 1 ? 0 : prev + 1));
       setIsSliding(false);
       setSlideDirection(null);
       setNextIndex(null);
-    }, 350);
+    }, 500);
   };
 
   // Touch events para swipe
@@ -63,48 +65,77 @@ export function Carousel({ images, alt, fallbackBg, fallbackIcon }: CarouselProp
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Camada das imagens */}
+      {/* Camada das imagens com slide real */}
       <div className="absolute inset-0 w-full h-full z-10">
-        {errorIndexes.includes(current) ? (
-          <div className={`absolute inset-0 w-full h-full bg-linear-to-br ${fallbackBg} flex items-center justify-center transition-transform duration-300 ${isSliding ? (slideDirection === 'left' ? '-translate-x-full' : 'translate-x-full') : 'translate-x-0'}`}>
-            <span className="text-6xl">{fallbackIcon}</span>
-          </div>
-        ) : (
-          <img
-            src={images[current]}
-            alt={alt}
-            className={`absolute inset-0 w-full h-full object-cover transition-transform duration-300
-              ${isSliding ? (slideDirection === 'left' ? '-translate-x-full' : 'translate-x-full') : 'translate-x-0'}
-            `}
-            onError={() => handleError(current)}
-          />
-        )}
-        {isSliding && nextIndex !== null && !errorIndexes.includes(nextIndex) && (
-          <img
-            src={images[nextIndex]}
-            alt={alt}
-            className={`absolute inset-0 w-full h-full object-cover transition-transform duration-300
-              ${slideDirection === 'left' ? 'translate-x-0' : ''}
-              ${slideDirection === 'right' ? 'translate-x-0' : ''}
-            `}
-            style={{
-              transform: slideDirection === 'left'
-                ? 'translateX(0)'
-                : slideDirection === 'right'
-                ? 'translateX(0)'
-                : 'translateX(0)'
-            }}
-          />
-        )}
-        {isSliding && nextIndex !== null && errorIndexes.includes(nextIndex) && (
-          <div className={`absolute inset-0 w-full h-full bg-linear-to-br ${fallbackBg} flex items-center justify-center transition-transform duration-300
-            ${slideDirection === 'left' ? 'translate-x-0' : ''}
-            ${slideDirection === 'right' ? 'translate-x-0' : ''}
-          `}
-          >
-            <span className="text-6xl">{fallbackIcon}</span>
-          </div>
-        )}
+        {/* Slide container */}
+        <div className="w-full h-full relative">
+          {/* Imagem atual */}
+          {(!isSliding || nextIndex === null) && (
+            errorIndexes.includes(current) ? (
+              <div
+                className={`absolute w-full h-full bg-linear-to-br ${fallbackBg} flex items-center justify-center transition-transform duration-500`}
+                style={{ transform: 'translateX(0)' }}
+              >
+                <span className="text-6xl">{fallbackIcon}</span>
+              </div>
+            ) : (
+              <img
+                src={images[current]}
+                alt={alt}
+                className="absolute w-full h-full object-cover transition-transform duration-500"
+                style={{ transform: 'translateX(0)' }}
+                onError={() => handleError(current)}
+              />
+            )
+          )}
+          {/* Transição: renderiza ambas as imagens */}
+          {isSliding && nextIndex !== null && (
+            <>
+              {/* Imagem atual saindo */}
+              {errorIndexes.includes(current) ? (
+                <div
+                  className={`absolute w-full h-full bg-linear-to-br ${fallbackBg} flex items-center justify-center transition-transform duration-500`}
+                  style={{
+                    transform: slideDirection === 'left'
+                      ? 'translateX(-100%)'
+                      : 'translateX(100%)'
+                  }}
+                >
+                  <span className="text-6xl">{fallbackIcon}</span>
+                </div>
+              ) : (
+                <img
+                  src={images[current]}
+                  alt={alt}
+                  className="absolute w-full h-full object-cover transition-transform duration-500"
+                  style={{
+                    transform: slideDirection === 'left'
+                      ? 'translateX(-100%)'
+                      : 'translateX(100%)'
+                  }}
+                  onError={() => handleError(current)}
+                />
+              )}
+              {/* Imagem seguinte entrando */}
+              {errorIndexes.includes(nextIndex) ? (
+                <div
+                  className={`absolute w-full h-full bg-linear-to-br ${fallbackBg} flex items-center justify-center transition-transform duration-500`}
+                  style={{ transform: 'translateX(0)' }}
+                >
+                  <span className="text-6xl">{fallbackIcon}</span>
+                </div>
+              ) : (
+                <img
+                  src={images[nextIndex]}
+                  alt={alt}
+                  className="absolute w-full h-full object-cover transition-transform duration-500"
+                  style={{ transform: 'translateX(0)' }}
+                  onError={() => handleError(nextIndex)}
+                />
+              )}
+            </>
+          )}
+        </div>
       </div>
       {/* Camada das setas e indicadores */}
       {images.length > 1 && (
