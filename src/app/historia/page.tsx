@@ -176,19 +176,14 @@ export default function Historia() {
 
 
                       {/* Conteúdo */}
-                      <div className={`p-6 bg-gradient-to-br ${getEventColor(
-                        event.type
-                      )}`}>
-                        <div className="flex items-center gap-3 mb-3">
-                          <span className="text-3xl">{getEventIcon(event.type)}</span>
-                          <h3 className="text-xl font-bold flex-1 text-white">
+                        <div className="p-6 bg-primary">
+                          <h3 className="text-xl font-bold text-white mb-3">
                             {event.title}
                           </h3>
+                          <p className="text-white/90 leading-relaxed">
+                            {event.description}
+                          </p>
                         </div>
-                        <p className="text-white/90 leading-relaxed">
-                          {event.description}
-                        </p>
-                      </div>
                     </div>
                   </div>
                 </div>
