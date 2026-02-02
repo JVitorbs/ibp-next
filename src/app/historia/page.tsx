@@ -2,6 +2,7 @@
 
 import Footer from "../../components/Footer";
 import { ScrollReveal } from "../../components/ScrollReveal";
+import { Carousel } from "./_components/Carousel";
 
 interface TimelineEvent {
   year: string;
@@ -9,6 +10,7 @@ interface TimelineEvent {
   description: string;
   type: "foundation" | "milestone" | "reform" | "achievement";
   image?: string;
+  images?: string[];
 }
 
 export default function Historia() {
@@ -21,32 +23,18 @@ export default function Historia() {
       image: "/images/historia/fundacao-1983.jpg",
     },
     {
-      year: "1990",
-      title: "Primeira Sede Própria",
-      description: "Aquisição do primeiro terreno e construção do templo, marco importante de crescimento e consolidação da congregação.",
-      type: "milestone",
-      image: "/images/historia/sede-1990.jpg",
-    },
-    {
-      year: "1995",
-      title: "Instituto Bíblico",
-      description: "Implementação formal da Escola Bíblica Dominical, estruturando o ensino sistemático da Palavra de Deus para todas as idades.",
+      year: "2013",
+      title: "Reforma e Construção do Templo",
+      description: "Grande reforma do templo com ampliação das instalações para acomodar o crescimento da igreja",
       type: "achievement",
-      image: "/images/historia/instituto-1995.jpg",
-    },
-    {
-      year: "2005",
-      title: "Reforma e Ampliação",
-      description: "Grande reforma do templo com ampliação das instalações para acomodar o crescimento da igreja e novos ministérios.",
-      type: "reform",
-      image: "/images/historia/reforma-2005.jpg",
-    },
-    {
-      year: "2010",
-      title: "Ministério de Pequenos Grupos",
-      description: "Início oficial dos Pequenos Grupos, fortalecendo a comunhão e o cuidado pastoral através de células nas casas.",
-      type: "achievement",
-      image: "/images/historia/pequenos-grupos-2010.jpg",
+      images: [
+        "/images/historia/demolicao.jpg",
+        "/images/historia/reconstrucao.jpg",
+        "/images/historia/reconstrucao_2.jpg",
+        "/images/historia/montagem.jpg",
+        "/images/historia/montagem_2.jpg",
+
+      ],
     },
     {
       year: "2013",
@@ -160,8 +148,10 @@ export default function Historia() {
                         alignSelf: index % 2 === 0 ? 'flex-end' : 'flex-start',
                       }}
                     >
-                      {/* Imagem */}
-                      {event.image && (
+                      {/* Imagem ou Carrossel */}
+                      {event.images && event.images.length > 0 ? (
+                        <Carousel images={event.images} alt={event.title} fallbackBg={getEventColor(event.type)} fallbackIcon={getEventIcon(event.type)} />
+                      ) : event.image ? (
                         <div className="relative h-48 overflow-hidden">
                           <img
                             src={event.image}
@@ -173,17 +163,17 @@ export default function Historia() {
                               const parent = e.currentTarget.parentElement;
                               if (parent) {
                                 parent.innerHTML = `
-                                  <div class="w-full h-full bg-gradient-to-br ${getEventColor(
-                                    event.type
-                                  )} flex items-center justify-center">
-                                    <span class="text-6xl">${getEventIcon(event.type)}</span>
+                                  <div class=\"w-full h-full bg-gradient-to-br ${getEventColor(event.type)} flex items-center justify-center\">
+                                    <span class=\"text-6xl\">${getEventIcon(event.type)}</span>
                                   </div>
                                 `;
                               }
                             }}
                           />
                         </div>
-                      )}
+                      ) : null}
+
+
 
                       {/* Conteúdo */}
                       <div className={`p-6 bg-gradient-to-br ${getEventColor(
