@@ -77,7 +77,6 @@ export default function InstitutoBiblicoPage() {
           </ScrollReveal>
         </div>
       </section>
-      <Footer />
     </main>
   );
 }

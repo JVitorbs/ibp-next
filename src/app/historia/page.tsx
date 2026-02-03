@@ -211,7 +211,6 @@ export default function Historia() {
           </div>
         </div>
       </main>
-      <Footer />
     </>
   );
 }
