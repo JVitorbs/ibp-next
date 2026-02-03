@@ -57,7 +57,6 @@ export default function PGPage() {
           </ScrollReveal>
         </div>
       </section>
-      <Footer />
     </main>
   );
 }

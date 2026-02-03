@@ -31,7 +31,7 @@ const diretoria: Diretor[] = [
     role: "2º Vice-Presidente",
     name: "Jair de Souza",
     description: "Auxilia na coordenação dos ministérios e projetos estratégicos.",
-    image: "/images/diretoria/vice2.jpg",
+    image: "/images/diretoria/vice2.png",
     category: "vice",
   },
   {
@@ -114,8 +114,8 @@ export default function DiretoriaPage() {
   const ministerios = diretoria.filter((p) => p.category === "ministerios");
 
   const CardMember = ({ pessoa }: { pessoa: Diretor }) => (
-    <div className="flex flex-col items-center">
-      <div className="w-24 h-24 rounded-full overflow-hidden bg-muted flex items-center justify-center text-primary font-bold text-2xl shadow-lg border-4 border-primary/20 mb-3">
+    <div className="flex flex-col items-center px-2 py-2 md:px-4 md:py-4">
+      <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden bg-muted flex items-center justify-center text-primary font-bold text-2xl md:text-3xl shadow-lg border-4 border-primary/20 mb-3 md:mb-4">
         {pessoa.image ? (
           <img
             src={pessoa.image}
@@ -126,14 +126,22 @@ export default function DiretoriaPage() {
           <span>{getInitials(pessoa.name)}</span>
         )}
       </div>
-      <h3 className="text-center font-semibold text-foreground text-sm">{pessoa.role}</h3>
-      <p className="text-center text-primary text-xs">{pessoa.name}</p>
+      <h3 className="text-center font-semibold text-foreground text-base md:text-lg mb-1">{pessoa.role}</h3>
+      <p className="text-center text-primary text-sm md:text-base">{pessoa.name}</p>
     </div>
   );
 
   return (
-    <main className="min-h-screen">
-      <section className="py-20 px-4 bg-gradient-to-b from-background to-muted/20">
+    <main
+      className="min-h-screen pt-6 px-4 pb-20 relative bg-primary/40"
+      style={{
+        backgroundImage: "url('/images/paper-texture.jpeg')",
+        backgroundBlendMode: "multiply",
+        backgroundSize: "cover",
+        backgroundRepeat: "repeat"
+      }}
+    >
+      <section className="py-20">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <ScrollReveal direction="down">
@@ -172,7 +180,7 @@ export default function DiretoriaPage() {
                 <div className="flex justify-center mb-8">
                   <div className="w-32 h-1 bg-primary/30"></div>
                 </div>
-                <div className="grid grid-cols-2 gap-8 max-w-2xl mx-auto">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-2xl mx-auto">
                   {vicepresidentes.map((pessoa, idx) => (
                     <ScrollReveal
                       key={pessoa.role}
@@ -200,7 +208,7 @@ export default function DiretoriaPage() {
                 <div className="flex justify-center mb-8">
                   <div className="w-48 h-1 bg-primary/30"></div>
                 </div>
-                <div className="grid grid-cols-3 gap-6 max-w-3xl mx-auto">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-3xl mx-auto">
                   {administrativo.map((pessoa, idx) => (
                     <ScrollReveal
                       key={pessoa.role}
@@ -228,7 +236,7 @@ export default function DiretoriaPage() {
                 <div className="flex justify-center mb-8">
                   <div className="w-full max-w-5xl h-1 bg-primary/30"></div>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-5xl mx-auto">
                   {ministerios.map((pessoa, idx) => (
                     <ScrollReveal
                       key={pessoa.role}
@@ -258,7 +266,6 @@ export default function DiretoriaPage() {
           </div>
         </div>
       </section>
-      <Footer />
     </main>
   );
 }
