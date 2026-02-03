@@ -11,7 +11,6 @@ export default function Home() {
       <AboutSection />
       <MissionSection />
       <ContactSection />
-      <Footer />
     </main>
   );
 }

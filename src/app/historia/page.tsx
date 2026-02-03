@@ -41,7 +41,7 @@ export default function Historia() {
       title: "30 Anos de História",
       description: "Celebração de três décadas de ministério, testemunhando a fidelidade de Deus e o impacto na comunidade local.",
       type: "milestone",
-      image: "/images/historia/demolicao.jpg",
+      image: "/images/historia/desmontagem_templo.png",
     },
     {
       year: "2020",
@@ -56,6 +56,16 @@ export default function Historia() {
       description: "Comemorando quatro décadas de história, com uma comunidade vibrante e comprometida em fazer a diferença.",
       type: "milestone",
       image: "/images/historia/40anos-2023.png",
+    },
+    {
+      year: "2023",
+      title: "Batismos",
+      description: "Momento de batismos celebrando a fé e o compromisso dos novos membros.",
+      type: "achievement",
+      images: [
+        "/images/historia/batismo_2023_1.png",
+        "/images/historia/batismo_2023_2.jpg"
+      ],
     },
   ];
 
@@ -107,7 +117,7 @@ export default function Historia() {
             </h1>
           </ScrollReveal>
           <ScrollReveal direction="up" delay={200}>
-            <p className="text-center text-muted-foreground mb-12 text-lg">
+            <p className="text-center text-white mb-12 text-lg">
               Marcos importantes que moldaram nossa jornada de fé
             </p>
           </ScrollReveal>
@@ -199,34 +209,8 @@ export default function Historia() {
               ))}
             </div>
           </div>
-
-          {/* Legenda */}
-          <ScrollReveal direction="up" delay={200}>
-            <div className="mt-16 p-6 bg-card rounded-lg border">
-              <h3 className="text-lg font-semibold mb-4 text-foreground">Legenda</h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl">🏛️</span>
-                  <span className="text-sm text-muted-foreground">Fundação</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl">⭐</span>
-                  <span className="text-sm text-muted-foreground">Marco</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl">🔨</span>
-                  <span className="text-sm text-muted-foreground">Reforma</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl">🎯</span>
-                  <span className="text-sm text-muted-foreground">Conquista</span>
-                </div>
-              </div>
-            </div>
-          </ScrollReveal>
         </div>
       </main>
-      <Footer />
     </>
   );
 }
