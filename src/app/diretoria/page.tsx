@@ -150,7 +150,7 @@ export default function DiretoriaPage() {
               </h1>
             </ScrollReveal>
             <ScrollReveal direction="up" delay={200}>
-              <p className="text-lg text-muted-foreground">
+              <p className="text-lg text-white">
                 Conheça a liderança que serve e conduz a Igreja Batista do Pirangi.
               </p>
             </ScrollReveal>
