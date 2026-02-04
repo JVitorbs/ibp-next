@@ -30,24 +30,31 @@ export default function Footer() {
             <h4 className="font-semibold mb-4">Links Rápidos</h4>
             <ul className="space-y-2">
               <li>
-                <Link href="/#sobre" className="text-muted-foreground hover:foreground transition">
-                  Sobre
-                </Link>
+                <Link href="/" className="text-muted-foreground hover:foreground transition">Início</Link>
               </li>
               <li>
-                <Link href="/#missao" className="text-muted-foreground hover:foreground transition">
-                  Missão
-                </Link>
+                <Link href="/#sobre" className="text-muted-foreground hover:foreground transition">Sobre</Link>
               </li>
               <li>
-                <Link href="/#contato" className="text-muted-foreground hover:foreground transition">
-                  Contato
-                </Link>
+                <Link href="/#missao" className="text-muted-foreground hover:foreground transition">Missão</Link>
               </li>
               <li>
-                <Link href="/historia" className="text-muted-foreground hover:foreground transition">
-                  História
-                </Link>
+                <Link href="/pg" className="text-muted-foreground hover:foreground transition">Pequenos Grupos</Link>
+              </li>
+              <li>
+                <Link href="/instituto-biblico" className="text-muted-foreground hover:foreground transition">Instituto Bíblico</Link>
+              </li>
+              <li>
+                <Link href="/diretoria" className="text-muted-foreground hover:foreground transition">Diretoria</Link>
+              </li>
+              <li>
+                <Link href="/galeria" className="text-muted-foreground hover:foreground transition">Galeria</Link>
+              </li>
+              <li>
+                <Link href="/historia" className="text-muted-foreground hover:foreground transition">História</Link>
+              </li>
+              <li>
+                <Link href="/#contato" className="text-muted-foreground hover:foreground transition">Contato</Link>
               </li>
             </ul>
           </div>
