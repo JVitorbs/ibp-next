@@ -45,6 +45,9 @@ export default function Navigation() {
           <Link href="/historia">
             <Button variant="ghost">História</Button>
           </Link>
+          <Link href="/galeria">
+            <Button variant="ghost">Galeria</Button>
+          </Link>
         </div>
 
         {/* Menu Mobile */}
@@ -89,6 +92,11 @@ export default function Navigation() {
               <Link href="/historia">
                 <Button variant="ghost" className="w-full justify-start">
                   História
+                </Button>
+              </Link>
+              <Link href="/galeria">
+                <Button variant="ghost" className="w-full justify-start">
+                  Galeria
                 </Button>
               </Link>
             </div>
