@@ -1,3 +1,17 @@
+/* FullCalendar navigation button background override */
+.fc .fc-button {
+  background: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+  border-color: var(--primary) !important;
+}
+.fc .fc-button:hover, .fc .fc-button:focus {
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+}
+.fc .fc-button:active {
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
+}
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -85,7 +99,14 @@
   --border: #e5e5e5;
   --input: #e5e5e5;
   --ring: #445c40;
-  --chart-1: #445c40;
+    --event-ceia: #445c40;
+    --event-missoes: #184a61;
+    --event-juventude: #ef6b19;
+    --event-casais: #baa28a;
+    --event-culto-adm: #666666;
+    --event-geral: #4ed0f2;
+    --event-fixo: #6eaa6f;
+    --event-comemorativo: #ffd700;
   --chart-2: #6eaa6f;
   --chart-3: #184a61;
   --chart-4: #ef6b19;
