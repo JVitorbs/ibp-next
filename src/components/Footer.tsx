@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { SiInstagram } from "react-icons/si";
+import { Mail } from "lucide-react";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -64,9 +66,12 @@ export default function Footer() {
 
           <div>
             <h4 className="font-semibold mb-4">Contato</h4>
-            <p className="text-muted-foreground text-sm">
-              ✉️ somosibp@gmail.com
-            </p>
+            <a href="mailto:somosibp@gmail.com" className="text-muted-foreground text-sm flex items-center gap-2 mb-2">
+              <Mail className="w-5 h-5" /> <span>somosibp@gmail.com</span>
+            </a>
+            <a href="https://www.instagram.com/somosibp" className="text-muted-foreground text-sm flex items-center gap-2" target="_blank" rel="noopener noreferrer">
+              <SiInstagram className="w-5 h-5" /> <span>@somosibp</span>
+            </a>
           </div>
         </div>
 
