@@ -110,136 +110,184 @@ const allEvents = [...eventos, ...programacoesFixas].map(ev => ({
 }));
 
 
-import React, { useState } from 'react';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetClose } from '@/components/ui/sheet';
+import React, { useEffect, useState } from 'react';
 
 const CalendarPage = () => {
+      const [isClient, setIsClient] = useState(false);
+      useEffect(() => {
+        setIsClient(true);
+      }, []);
+    if (typeof window !== 'undefined') {
+      // eslint-disable-next-line no-console
+      console.log('CalendarPage renderizou no client');
+    }
   const [open, setOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedEvents, setSelectedEvents] = useState<any[]>([]);
 
+  useEffect(() => {
+    if (open) {
+      // eslint-disable-next-line no-console
+      console.log('Modal aberto para', selectedDate, selectedEvents);
+    }
+  }, [open, selectedDate, selectedEvents]);
+
   // Função para pegar todos eventos do dia considerando todos os tipos
+  // Função para normalizar datas para 'YYYY-MM-DD'
+  function normalizeDate(d: string | Date) {
+    const dateObj = typeof d === 'string' ? new Date(d) : d;
+    return dateObj.toISOString().slice(0, 10);
+  }
+
   function getEventsOfDay(date: string) {
     const dayOfWeek = new Date(date).getDay();
-    return allEvents.filter(ev => {
-      if ('date' in ev && ev.date) return ev.date === date;
+    const normDate = normalizeDate(date);
+    const result = allEvents.filter(ev => {
+      // Evento de um dia específico
+      if ('date' in ev && ev.date && normalizeDate(ev.date) === normDate) return true;
+      // Evento de múltiplos dias
       if ('start' in ev && 'end' in ev && ev.start && ev.end) {
-        return date >= ev.start && date <= ev.end;
+        const start = normalizeDate(ev.start);
+        const end = normalizeDate(ev.end);
+        if (normDate >= start && normDate <= end) return true;
       }
-      if ('daysOfWeek' in ev && Array.isArray(ev.daysOfWeek)) {
-        return ev.daysOfWeek.includes(dayOfWeek);
-      }
+      // Evento recorrente por dia da semana
+      if ('daysOfWeek' in ev && Array.isArray(ev.daysOfWeek) && ev.daysOfWeek.includes(dayOfWeek)) return true;
       return false;
     });
+    // Log para depuração
+    if (typeof window !== 'undefined') {
+      // eslint-disable-next-line no-console
+      console.log('Eventos encontrados para', normDate, result);
+    }
+    return result;
   }
 
   // Handler para clique em evento
   function handleEventClick(info: any) {
     const date = info.event.startStr;
+    const events = getEventsOfDay(date);
+    // eslint-disable-next-line no-console
+    console.log('Eventos encontrados para', date, events);
     setSelectedDate(date);
-    setSelectedEvents(getEventsOfDay(date));
+    setSelectedEvents(events);
     setOpen(true);
   }
 
   // Handler para clique em dia vazio
   function handleDateClick(info: DateClickArg) {
     const date = info.dateStr;
+    const events = getEventsOfDay(date);
+    // eslint-disable-next-line no-console
+    console.log('Eventos encontrados para', date, events);
     setSelectedDate(date);
-    setSelectedEvents(getEventsOfDay(date));
+    setSelectedEvents(events);
     setOpen(true);
   }
 
   return (
     <div className="flex flex-col gap-8 p-8 bg-primary/40">
-      {/* Modal/Card central customizado */}
-      {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          {/* Backdrop com blur */}
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setOpen(false)} />
-          <Card className="relative w-full max-w-md px-6 py-4 rounded-2xl shadow-2xl bg-background flex flex-col items-center z-10">
-            {/* Botão de fechar dentro do Card */}
-            <button
-              className="absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none"
-              onClick={() => setOpen(false)}
-              aria-label="Fechar"
-            >
-              <span aria-hidden="true">×</span>
-            </button>
-            <div className="w-full mt-2 text-center font-bold text-lg">Programações do dia</div>
-            <div className="text-center text-muted-foreground mb-2">
-              {selectedDate && (
-                <span>{new Date(selectedDate).toLocaleDateString('pt-BR')}</span>
-              )}
+      {isClient && (
+        <>
+          {/* Modal/Card central customizado */}
+          {open && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center">
+              {/* Backdrop com blur */}
+              <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setOpen(false)} />
+              <Card className="relative w-full max-w-md px-6 py-4 rounded-2xl shadow-2xl bg-background flex flex-col items-center z-10">
+                {/* Botão de fechar dentro do Card */}
+                <button
+                  className="absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none"
+                  onClick={() => setOpen(false)}
+                  aria-label="Fechar"
+                >
+                  <span aria-hidden="true">×</span>
+                </button>
+                <div className="w-full mt-2 text-center font-bold text-lg">Programações do dia</div>
+                <div className="text-center text-muted-foreground mb-2">
+                  {selectedDate && (
+                    <span>{new Date(selectedDate).toLocaleDateString('pt-BR')}</span>
+                  )}
+                </div>
+                <div className="pt-2 w-full">
+                  {selectedEvents.length > 0 ? (
+                    <ul className="space-y-2">
+                      {selectedEvents.map((ev, idx) => (
+                        <li key={idx} className="border-b pb-2 flex items-start gap-2">
+                          {/* Dot/bar colorido igual ao calendário */}
+                          <span
+                            className="inline-block mt-1 w-3 h-3 rounded-full shrink-0"
+                            style={{ background: getEventColor(ev) }}
+                            aria-hidden="true"
+                          />
+                          <div className="flex-1">
+                            <div className="font-semibold">{ev.title}</div>
+                            {('extendedProps' in ev && ev.extendedProps?.horario) && (
+                              <div className="text-sm text-muted-foreground">Horário: {ev.extendedProps.horario}</div>
+                            )}
+                            {('startTime' in ev && ev.startTime) && (
+                              <div className="text-sm text-muted-foreground">Horário: {ev.startTime}</div>
+                            )}
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <div className="text-muted-foreground">Nenhuma programação para este dia.</div>
+                  )}
+                </div>
+              </Card>
             </div>
-            <div className="pt-2 w-full">
-              {selectedEvents.length > 0 ? (
-                <ul className="space-y-2">
-                  {selectedEvents.map((ev, idx) => (
-                    <li key={idx} className="border-b pb-2">
-                      <div className="font-semibold">{ev.title}</div>
-                      {('extendedProps' in ev && ev.extendedProps?.horario) && (
-                        <div className="text-sm text-muted-foreground">Horário: {ev.extendedProps.horario}</div>
-                      )}
-                      {('startTime' in ev && ev.startTime) && (
-                        <div className="text-sm text-muted-foreground">Horário: {ev.startTime}</div>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <div className="text-muted-foreground">Nenhuma programação para este dia.</div>
-              )}
-            </div>
-          </Card>
-        </div>
-      )}
-      {/* Mês atual */}
-      <section>
-        <h2 className="text-2xl font-bold mb-4">Calendário - Mês Atual</h2>
-        <Card className="rounded-3xl border p-4 min-h-130 shadow-2xl">
-          <FullCalendar
-            plugins={[dayGridPlugin, interactionPlugin]}
-            initialView="dayGridMonth"
-            locale="pt-br"
-            height={480}
-            contentHeight={480}
-            headerToolbar={{
-              left: 'prev,next today',
-              center: 'title',
-              right: ''
-            }}
-            buttonText={{ today: 'Hoje' }}
-            events={allEvents}
-            eventClick={handleEventClick}
-            dateClick={handleDateClick}
-          />
-        </Card>
-      </section>
-      {/* Panorama geral */}
-      <section>
-        <h2 className="text-xl font-semibold mb-4">Panorama Geral dos Meses</h2>
-        <div id="calendar-panorama" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {[...Array(12)].map((_, i) => (
-            <Card key={i} className="rounded-3xl border p-4 shadow-2xl">
+          )}
+          {/* Mês atual */}
+          <section>
+            <h2 className="text-2xl font-bold mb-4">Calendário - Mês Atual</h2>
+            <Card className="rounded-3xl border p-4 min-h-130 shadow-2xl">
               <FullCalendar
                 plugins={[dayGridPlugin, interactionPlugin]}
                 initialView="dayGridMonth"
                 locale="pt-br"
-                height={350}
-                headerToolbar={false}
+                height={480}
+                contentHeight={480}
+                headerToolbar={{
+                  left: 'prev,next today',
+                  center: 'title',
+                  right: ''
+                }}
+                buttonText={{ today: 'Hoje' }}
                 events={allEvents}
-                initialDate={`2026-${String(i+1).padStart(2, '0')}-01`}
-                dayMaxEventRows={3}
                 eventClick={handleEventClick}
                 dateClick={handleDateClick}
               />
-              <div className="text-center font-semibold mt-2">
-                {new Date(2026, i).toLocaleString('pt-BR', { month: 'long' }).toUpperCase()}
-              </div>
             </Card>
-          ))}
-        </div>
-      </section>
+          </section>
+          {/* Panorama geral */}
+          <section>
+            <h2 className="text-xl font-semibold mb-4">Panorama Geral dos Meses</h2>
+            <div id="calendar-panorama" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {[...Array(12)].map((_, i) => (
+                <Card key={i} className="rounded-3xl border p-4 shadow-2xl">
+                  <FullCalendar
+                    plugins={[dayGridPlugin, interactionPlugin]}
+                    initialView="dayGridMonth"
+                    locale="pt-br"
+                    height={350}
+                    headerToolbar={false}
+                    events={allEvents}
+                    initialDate={`2026-${String(i+1).padStart(2, '0')}-01`}
+                    dayMaxEventRows={3}
+                    eventClick={handleEventClick}
+                    dateClick={handleDateClick}
+                  />
+                  <div className="text-center font-semibold mt-2">
+                    {new Date(2026, i).toLocaleString('pt-BR', { month: 'long' }).toUpperCase()}
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </section>
+        </>
+      )}
     </div>
   );
 };
