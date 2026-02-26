@@ -151,26 +151,26 @@ const CalendarPage = () => {
 
   return (
     <div className="flex flex-col gap-8 p-8 bg-primary/40">
-      {/* Modal/Card central */}
-      <Sheet open={open} onOpenChange={setOpen}>
-        <SheetContent
-          side={undefined}
-          className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-transparent shadow-none border-none p-0 flex items-center justify-center transition-all duration-200 ease-out scale-95 opacity-0 data-[state=open]:scale-100 data-[state=open]:opacity-100"
-        >
-          <Card className="w-full max-w-md px-6 py-4 rounded-2xl shadow-2xl bg-background flex flex-col items-center relative">
+      {/* Modal/Card central customizado */}
+      {open && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* Backdrop com blur */}
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setOpen(false)} />
+          <Card className="relative w-full max-w-md px-6 py-4 rounded-2xl shadow-2xl bg-background flex flex-col items-center z-10">
             {/* Botão de fechar dentro do Card */}
-            <SheetClose className="absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none">
+            <button
+              className="absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none"
+              onClick={() => setOpen(false)}
+              aria-label="Fechar"
+            >
               <span aria-hidden="true">×</span>
-              <span className="sr-only">Fechar</span>
-            </SheetClose>
-            <SheetHeader className="w-full">
-              <SheetTitle className="mt-2 text-center w-full">Programações do dia</SheetTitle>
-              <SheetDescription className="text-center">
-                {selectedDate && (
-                  <span>{new Date(selectedDate).toLocaleDateString('pt-BR')}</span>
-                )}
-              </SheetDescription>
-            </SheetHeader>
+            </button>
+            <div className="w-full mt-2 text-center font-bold text-lg">Programações do dia</div>
+            <div className="text-center text-muted-foreground mb-2">
+              {selectedDate && (
+                <span>{new Date(selectedDate).toLocaleDateString('pt-BR')}</span>
+              )}
+            </div>
             <div className="pt-2 w-full">
               {selectedEvents.length > 0 ? (
                 <ul className="space-y-2">
@@ -191,8 +191,8 @@ const CalendarPage = () => {
               )}
             </div>
           </Card>
-        </SheetContent>
-      </Sheet>
+        </div>
+      )}
       {/* Mês atual */}
       <section>
         <h2 className="text-2xl font-bold mb-4">Calendário - Mês Atual</h2>
