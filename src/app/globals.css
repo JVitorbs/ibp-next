@@ -85,7 +85,14 @@
   --border: #e5e5e5;
   --input: #e5e5e5;
   --ring: #445c40;
-  --chart-1: #445c40;
+    --event-ceia: #445c40;
+    --event-missoes: #184a61;
+    --event-juventude: #ef6b19;
+    --event-casais: #baa28a;
+    --event-culto-adm: #666666;
+    --event-geral: #4ed0f2;
+    --event-fixo: #6eaa6f;
+    --event-comemorativo: #ffd700;
   --chart-2: #6eaa6f;
   --chart-3: #184a61;
   --chart-4: #ef6b19;

@@ -4,13 +4,117 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import multiMonthPlugin from '@fullcalendar/multimonth';
 import { Card } from '@/components/ui/card';
 
+
+
+// Função para definir cor do evento
+function getEventColor(event: { title: string }): string {
+  const t = event.title.toLowerCase();
+  if (t.includes('ceia do senhor')) return 'var(--event-ceia)';
+  if (t.includes('miss')) return 'var(--event-missoes)';
+  if (t.includes('juventude') || t.includes('jovens')) return 'var(--event-juventude)';
+  if (t.includes('casais')) return 'var(--event-casais)';
+  if (t.includes('culto administrativo')) return 'var(--event-culto-adm)';
+  if (t.includes('vigília') || t.includes('treinamento') || t.includes('pgzão') || t.includes('assembleia') || t.includes('ação evangelística') || t.includes('encontro de promotores') || t.includes('proclamai') || t.includes('feira') || t.includes('estudo bíblico') || t.includes('chá de lenços')) return 'var(--event-geral)';
+  if (t.includes('instituto bíblico') || t.includes('oração matutina') || t === 'culto') return 'var(--event-fixo)';
+  if (t.includes('dia das mães') || t.includes('dia dos pais') || t.includes('crianças') || t.includes('natal') || t.includes('virada')) return 'var(--event-comemorativo)';
+  return 'var(--event-geral)';
+}
+
+const eventos = [
+  // Fevereiro
+  { title: 'Ceia do Senhor', date: '2026-02-01' },
+  { title: 'Retorno do Instituto', date: '2026-02-08' },
+  { title: 'Vigília', date: '2026-02-13', extendedProps: { horario: '19h às 00h' } },
+  { title: 'Encontro de Promotores de Missões', date: '2026-02-21' },
+  { title: 'Culto Administrativo Ordinário', date: '2026-02-22' },
+  { title: 'Treinamento Evangelismo', date: '2026-02-28', extendedProps: { horario: '15h às 18h' } },
+  // Março
+  { title: 'Abertura Missões Mundiais e Dia da Esposa do Pastor', date: '2026-03-01' },
+  { title: 'Semana de Oração por Missões Mundiais', start: '2026-03-02', end: '2026-03-07' },
+  { title: 'Evento - Dia das Mulheres (Intercâmbio)', date: '2026-03-14' },
+  { title: 'Ceia do Senhor', date: '2026-03-15' },
+  { title: 'Ação Evangelística – IBP na Praça', date: '2026-03-28' },
+  { title: 'Encerramento da Campanha Missões Mundiais', date: '2026-03-29' },
+  // Abril
+  { title: 'Musical de Páscoa', date: '2026-04-04' },
+  { title: 'Culto da Ressurreição + Ceia do Senhor', date: '2026-04-05', extendedProps: { horario: '08h' } },
+  { title: 'Programação da Juventude', date: '2026-04-18' },
+  { title: 'Culto Administrativo Ordinário', date: '2026-04-19' },
+  { title: 'Proclamai Recife', start: '2026-04-18', end: '2026-04-21' },
+  { title: 'Encontro de Casais', date: '2026-04-25' },
+  { title: 'Assembleia da CBNR', date: '2026-04-30' },
+  // Maio
+  { title: 'Assembleia da CBNR', start: '2026-05-01', end: '2026-05-02' },
+  { title: 'Ceia do Senhor', date: '2026-05-03' },
+  { title: 'Evento – Dia das mães', date: '2026-05-09' },
+  { title: 'Congresso da Família IBP', start: '2026-05-22', end: '2026-05-24' },
+  { title: 'Acampamento de Promotores de Missões', start: '2026-05-29', end: '2026-05-31' },
+  { title: 'Abertura de Missões Estaduais', date: '2026-05-31' },
+  // Junho
+  { title: 'Semana de Oração Missões Estaduais', start: '2026-06-01', end: '2026-06-06' },
+  { title: 'Ceia do Senhor', date: '2026-06-07' },
+  { title: 'Encontro de Casais – Jantar dos Namorados', date: '2026-06-13' },
+  { title: 'Acampadentro Juventude', date: '2026-06-20' },
+  { title: 'Culto Administrativo Ordinário', date: '2026-06-21' },
+  { title: 'Encerramento da Campanha', date: '2026-06-28' },
+  // Julho
+  { title: 'Ceia do Senhor', date: '2026-07-05' },
+  { title: 'PGzão', date: '2026-07-08' },
+  { title: 'Programação da Juventude', date: '2026-07-18' },
+  { title: 'Escola Bíblica de Férias – EBF', date: '2026-07-25' },
+  // Agosto
+  { title: 'Ceia do Senhor + Dia do Adolescente Batista', date: '2026-08-02' },
+  { title: 'Assembleia da ABL', date: '2026-08-08' },
+  { title: 'Café da Manhã – Dia dos Pais', date: '2026-08-09' },
+  { title: 'Congresso da Juventude', start: '2026-08-14', end: '2026-08-15' },
+  { title: 'Culto Administrativo Ordinário', date: '2026-08-23' },
+  { title: 'Encontro de Casais', date: '2026-08-30' },
+  // Setembro
+  { title: 'Entrega de insumos sociais', date: '2026-09-05' },
+  { title: 'Conferência de Aniversário da IBP', start: '2026-09-05', end: '2026-09-06' },
+  { title: 'Ceia do Senhor', date: '2026-09-13' },
+  { title: 'Abertura de Missões Nacionais', date: '2026-09-27' },
+  { title: 'Semana de Oração por Missões Nacionais', start: '2026-09-28', end: '2026-10-02' },
+  // Outubro
+  { title: 'Ceia do Senhor', date: '2026-10-04' },
+  { title: 'Evento – Juventude', date: '2026-10-10' },
+  { title: 'Festa das Crianças', date: '2026-10-17' },
+  { title: 'Culto Administrativo Ordinário', date: '2026-10-18' },
+  { title: 'Chá de Lenços', date: '2026-10-24' },
+  { title: 'Encerramento da Campanha de Missões', date: '2026-10-25' },
+  { title: 'Vigília', date: '2026-10-30' },
+  // Novembro
+  { title: 'Ceia do Senhor', date: '2026-11-01' },
+  { title: 'Encontro de Casais', date: '2026-11-07' },
+  { title: 'Feira Missionária local', date: '2026-11-14' },
+  { title: 'Estudo Bíblico dos Jovens', date: '2026-11-21' },
+  { title: 'Dia de Ação de Graças – PGzão', date: '2026-11-26' },
+  // Dezembro
+  { title: 'Ceia do Senhor', date: '2026-12-06' },
+  { title: 'Confraternização Jovens e Mulheres', date: '2026-12-12' },
+  { title: 'Culto Administrativo Ordinário', date: '2026-12-20' },
+  { title: 'Culto de Natal', date: '2026-12-25' },
+  { title: 'Culto da Virada', date: '2026-12-31' },
+];
+
+const programacoesFixas = [
+  { daysOfWeek: [0], title: 'Instituto Bíblico', startTime: '09:00' },
+  { daysOfWeek: [0], title: 'Culto', startTime: '18:00' },
+  { daysOfWeek: [6], title: 'Oração Matutina', startTime: '06:00' },
+];
+
+const allEvents = [...eventos, ...programacoesFixas].map(ev => ({
+  ...ev,
+  color: getEventColor(ev)
+}));
+
 const CalendarPage = () => {
   return (
-    <div className="flex flex-col gap-8 p-8">
+    <div className="flex flex-col gap-8 p-8 bg-primary/40">
       {/* Mês atual */}
       <section>
         <h2 className="text-2xl font-bold mb-4">Calendário - Mês Atual</h2>
-        <Card className="rounded border p-4 min-h-[400px]">
+        <Card className="rounded border p-4 min-h-100">
           <FullCalendar
             plugins={[dayGridPlugin]}
             initialView="dayGridMonth"
@@ -21,6 +125,7 @@ const CalendarPage = () => {
               center: 'title',
               right: ''
             }}
+            events={allEvents}
           />
         </Card>
       </section>
@@ -28,22 +133,23 @@ const CalendarPage = () => {
       <section>
         <h2 className="text-xl font-semibold mb-4">Panorama Geral dos Meses</h2>
         <div id="calendar-panorama" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card className="rounded border p-4">
-            <FullCalendar
-              plugins={[multiMonthPlugin]}
-              initialView="multiMonthYear"
-              locale="pt-br"
-              height={350}
-              headerToolbar={false}
-              views={{
-                multiMonthYear: {
-                  multiMonthMinWidth: 200,
-                  multiMonthMaxColumns: 4,
-                  multiMonthMaxRows: 1,
-                },
-              }}
-            />
-          </Card>
+          {[...Array(12)].map((_, i) => (
+            <Card key={i} className="rounded border p-4">
+              <FullCalendar
+                plugins={[dayGridPlugin]}
+                initialView="dayGridMonth"
+                locale="pt-br"
+                height={350}
+                headerToolbar={false}
+                events={allEvents}
+                initialDate={`2026-${String(i+1).padStart(2, '0')}-01`}
+                dayMaxEventRows={3}
+              />
+              <div className="text-center font-semibold mt-2">
+                {new Date(2026, i).toLocaleString('pt-BR', { month: 'long' }).toUpperCase()}
+              </div>
+            </Card>
+          ))}
         </div>
       </section>
     </div>
