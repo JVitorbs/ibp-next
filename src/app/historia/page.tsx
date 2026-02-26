@@ -13,14 +13,23 @@ interface TimelineEvent {
   images?: string[];
 }
 
-export default function Historia() {
-  const events: TimelineEvent[] = [
-    {
+{/*{
       year: "1983",
       title: "Fundação da Igreja",
       description: "Início da Igreja Batista do Pirangi com um pequeno grupo de irmãos comprometidos com a fé e a missão de servir a comunidade.",
       type: "foundation",
       image: "/images/historia/fundacao-1983.jpg",
+    },*/}
+
+export default function Historia() {
+  const events: TimelineEvent[] = [
+    
+    {
+      year: "1990",
+      title: "Crescimento e Consolidação",
+      description: "Período de crescimento significativo, com a expansão dos ministérios e o fortalecimento da comunidade de fé.",
+      type: "milestone",
+      image: "/images/historia/inicio.png",
     },
     {
       year: "2013",
