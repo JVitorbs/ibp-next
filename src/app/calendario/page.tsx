@@ -188,6 +188,36 @@ const CalendarPage = () => {
           <section>
             <h2 className="text-2xl font-bold mb-4">Calendário - Mês Atual</h2>
             <Card className="rounded-3xl border p-4 min-h-130 shadow-2xl">
+              <style>{`
+                .fc-header-toolbar {
+                  display: flex;
+                  flex-direction: row;
+                  align-items: center;
+                  justify-content: space-between;
+                  width: 100%;
+                  gap: 0.5rem;
+                }
+                .fc-toolbar-chunk {
+                  display: flex;
+                  align-items: center;
+                }
+                .fc-toolbar-chunk:first-child {
+                  flex: 1 1 0%;
+                  justify-content: flex-start;
+                }
+                .fc-toolbar-chunk:last-child {
+                  flex: 1 1 0%;
+                  justify-content: flex-end;
+                }
+                .fc-toolbar-title {
+                  width: 100%;
+                  text-align: right !important;
+                  font-size: 1.5rem;
+                  font-weight: 600;
+                  margin: 0;
+                  display: block;
+                }
+              `}</style>
               <FullCalendar
                 plugins={[dayGridPlugin, interactionPlugin]}
                 initialView="dayGridMonth"
@@ -196,8 +226,8 @@ const CalendarPage = () => {
                 contentHeight={480}
                 headerToolbar={{
                   left: 'prev,next today',
-                  center: 'title',
-                  right: ''
+                  center: '',
+                  right: 'title'
                 }}
                 buttonText={{ today: 'Hoje' }}
                 events={allEvents}
