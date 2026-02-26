@@ -2,6 +2,7 @@
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import multiMonthPlugin from '@fullcalendar/multimonth';
+import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import { Card } from '@/components/ui/card';
 
 
@@ -108,15 +109,91 @@ const allEvents = [...eventos, ...programacoesFixas].map(ev => ({
   color: getEventColor(ev)
 }));
 
+
+import React, { useState } from 'react';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetClose } from '@/components/ui/sheet';
+
 const CalendarPage = () => {
+  const [open, setOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [selectedEvents, setSelectedEvents] = useState<any[]>([]);
+
+  // Função para pegar todos eventos do dia considerando todos os tipos
+  function getEventsOfDay(date: string) {
+    const dayOfWeek = new Date(date).getDay();
+    return allEvents.filter(ev => {
+      if ('date' in ev && ev.date) return ev.date === date;
+      if ('start' in ev && 'end' in ev && ev.start && ev.end) {
+        return date >= ev.start && date <= ev.end;
+      }
+      if ('daysOfWeek' in ev && Array.isArray(ev.daysOfWeek)) {
+        return ev.daysOfWeek.includes(dayOfWeek);
+      }
+      return false;
+    });
+  }
+
+  // Handler para clique em evento
+  function handleEventClick(info: any) {
+    const date = info.event.startStr;
+    setSelectedDate(date);
+    setSelectedEvents(getEventsOfDay(date));
+    setOpen(true);
+  }
+
+  // Handler para clique em dia vazio
+  function handleDateClick(info: DateClickArg) {
+    const date = info.dateStr;
+    setSelectedDate(date);
+    setSelectedEvents(getEventsOfDay(date));
+    setOpen(true);
+  }
+
   return (
     <div className="flex flex-col gap-8 p-8 bg-primary/40">
+      {/* Modal/Card central */}
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetContent
+          side={undefined}
+          className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-transparent shadow-none border-none p-0 flex items-center justify-center transition-all duration-200 ease-out scale-95 opacity-0 data-[state=open]:scale-100 data-[state=open]:opacity-100"
+        >
+          <Card className="w-full max-w-md px-6 py-4 rounded-2xl shadow-2xl bg-background flex flex-col items-center">
+            <SheetHeader className="w-full">
+              <SheetTitle className="mt-2 text-center w-full">Programações do dia</SheetTitle>
+              <SheetDescription className="text-center">
+                {selectedDate && (
+                  <span>{new Date(selectedDate).toLocaleDateString('pt-BR')}</span>
+                )}
+              </SheetDescription>
+            </SheetHeader>
+            <div className="pt-2 w-full">
+              {selectedEvents.length > 0 ? (
+                <ul className="space-y-2">
+                  {selectedEvents.map((ev, idx) => (
+                    <li key={idx} className="border-b pb-2">
+                      <div className="font-semibold">{ev.title}</div>
+                      {('extendedProps' in ev && ev.extendedProps?.horario) && (
+                        <div className="text-sm text-muted-foreground">Horário: {ev.extendedProps.horario}</div>
+                      )}
+                      {('startTime' in ev && ev.startTime) && (
+                        <div className="text-sm text-muted-foreground">Horário: {ev.startTime}</div>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <div className="text-muted-foreground">Nenhuma programação para este dia.</div>
+              )}
+            </div>
+          </Card>
+        </SheetContent>
+      </Sheet>
       {/* Mês atual */}
       <section>
         <h2 className="text-2xl font-bold mb-4">Calendário - Mês Atual</h2>
-        <Card className="rounded-3xl border p-4 min-h-[520px] shadow-2xl">
+        <Card className="rounded-3xl border p-4 min-h-130 shadow-2xl">
           <FullCalendar
-            plugins={[dayGridPlugin]}
+            plugins={[dayGridPlugin, interactionPlugin]}
             initialView="dayGridMonth"
             locale="pt-br"
             height={480}
@@ -128,6 +205,8 @@ const CalendarPage = () => {
             }}
             buttonText={{ today: 'Hoje' }}
             events={allEvents}
+            eventClick={handleEventClick}
+            dateClick={handleDateClick}
           />
         </Card>
       </section>
@@ -138,7 +217,7 @@ const CalendarPage = () => {
           {[...Array(12)].map((_, i) => (
             <Card key={i} className="rounded-3xl border p-4 shadow-2xl">
               <FullCalendar
-                plugins={[dayGridPlugin]}
+                plugins={[dayGridPlugin, interactionPlugin]}
                 initialView="dayGridMonth"
                 locale="pt-br"
                 height={350}
@@ -146,6 +225,8 @@ const CalendarPage = () => {
                 events={allEvents}
                 initialDate={`2026-${String(i+1).padStart(2, '0')}-01`}
                 dayMaxEventRows={3}
+                eventClick={handleEventClick}
+                dateClick={handleDateClick}
               />
               <div className="text-center font-semibold mt-2">
                 {new Date(2026, i).toLocaleString('pt-BR', { month: 'long' }).toUpperCase()}
