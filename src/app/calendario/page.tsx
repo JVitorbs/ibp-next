@@ -114,17 +114,19 @@ const CalendarPage = () => {
       {/* Mês atual */}
       <section>
         <h2 className="text-2xl font-bold mb-4">Calendário - Mês Atual</h2>
-        <Card className="rounded border p-4 min-h-100">
+        <Card className="rounded-3xl border p-4 min-h-[520px] shadow-2xl">
           <FullCalendar
             plugins={[dayGridPlugin]}
             initialView="dayGridMonth"
             locale="pt-br"
-            height={400}
+            height={480}
+            contentHeight={480}
             headerToolbar={{
               left: 'prev,next today',
               center: 'title',
               right: ''
             }}
+            buttonText={{ today: 'Hoje' }}
             events={allEvents}
           />
         </Card>
@@ -134,7 +136,7 @@ const CalendarPage = () => {
         <h2 className="text-xl font-semibold mb-4">Panorama Geral dos Meses</h2>
         <div id="calendar-panorama" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {[...Array(12)].map((_, i) => (
-            <Card key={i} className="rounded border p-4">
+            <Card key={i} className="rounded-3xl border p-4 shadow-2xl">
               <FullCalendar
                 plugins={[dayGridPlugin]}
                 initialView="dayGridMonth"

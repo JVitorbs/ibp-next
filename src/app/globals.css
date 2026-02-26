@@ -1,3 +1,17 @@
+/* FullCalendar navigation button background override */
+.fc .fc-button {
+  background: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+  border-color: var(--primary) !important;
+}
+.fc .fc-button:hover, .fc .fc-button:focus {
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+}
+.fc .fc-button:active {
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
+}
 @import "tailwindcss";
 @import "tw-animate-css";
 
