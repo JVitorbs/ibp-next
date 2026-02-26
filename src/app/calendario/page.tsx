@@ -6,8 +6,7 @@ import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import { Card } from '@/components/ui/card';
 import EventInfoModal from './EventInfoModal';
 import { getEventColor } from './utils';
-
-
+import { ScrollReveal } from "@/components/ScrollReveal";
 
 const eventos = [
   // Fevereiro
@@ -177,125 +176,131 @@ const CalendarPage = () => {
     <div className="flex flex-col gap-8 p-8 bg-primary/30">
       {isClient && (
         <>
-          {/* Modal/Card central customizado */}
-          <EventInfoModal
-            open={open}
-            onClose={() => setOpen(false)}
-            selectedDate={selectedDate}
-            selectedEvents={selectedEvents}
-          />
-          {/* Mês atual */}
-          <section>
-            <h2 className="text-2xl font-bold mb-4">Calendário - Mês Atual</h2>
-            <Card className="rounded-3xl border p-4 min-h-130 shadow-2xl">
-              <style>{`
-                .fc-header-toolbar {
-                  display: flex;
-                  flex-direction: row;
-                  align-items: center;
-                  justify-content: space-between;
-                  width: 100%;
-                  gap: 0.5rem;
-                }
-                .fc-toolbar-chunk {
-                  display: flex;
-                  align-items: center;
-                }
-                .fc-toolbar-chunk:first-child {
-                  flex: 1 1 0%;
-                  justify-content: flex-start;
-                }
-                .fc-toolbar-chunk:last-child {
-                  flex: 1 1 0%;
-                  justify-content: flex-end;
-                }
-                .fc-toolbar-title {
-                  width: 100%;
-                  text-align: right !important;
-                  font-size: 1.5rem;
-                  font-weight: 600;
-                  margin: 0;
-                  display: block;
-                }
-              `}</style>
-              <FullCalendar
-                plugins={[dayGridPlugin, interactionPlugin]}
-                initialView="dayGridMonth"
-                locale="pt-br"
-                height={480}
-                contentHeight={480}
-                headerToolbar={{
-                  left: 'prev,next today',
-                  center: '',
-                  right: 'title'
-                }}
-                buttonText={{ today: 'Hoje' }}
-                events={allEvents}
-                eventClick={handleEventClick}
-                dateClick={handleDateClick}
-              />
-            </Card>
-          </section>
-          {/* Legenda de cores */}
-          <div className="flex flex-wrap gap-4 items-center justify-center my-4">
-            <div className="flex items-center gap-2">
-              <span className="inline-block w-4 h-4 rounded-full" style={{ background: 'var(--event-ceia)' }} />
-              <span className="text-sm">Ceia do Senhor</span>
+          <ScrollReveal direction="up">
+            {/* Modal/Card central customizado */}
+            <EventInfoModal
+              open={open}
+              onClose={() => setOpen(false)}
+              selectedDate={selectedDate}
+              selectedEvents={selectedEvents}
+            />
+            {/* Mês atual */}
+            <section>
+              <h2 className="text-2xl font-bold mb-4">Calendário - Mês Atual</h2>
+              <Card className="rounded-3xl border p-4 min-h-130 shadow-2xl">
+                <style>{`
+                  .fc-header-toolbar {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: space-between;
+                    width: 100%;
+                    gap: 0.5rem;
+                  }
+                  .fc-toolbar-chunk {
+                    display: flex;
+                    align-items: center;
+                  }
+                  .fc-toolbar-chunk:first-child {
+                    flex: 1 1 0%;
+                    justify-content: flex-start;
+                  }
+                  .fc-toolbar-chunk:last-child {
+                    flex: 1 1 0%;
+                    justify-content: flex-end;
+                  }
+                  .fc-toolbar-title {
+                    width: 100%;
+                    text-align: right !important;
+                    font-size: 1.5rem;
+                    font-weight: 600;
+                    margin: 0;
+                    display: block;
+                  }
+                `}</style>
+                <FullCalendar
+                  plugins={[dayGridPlugin, interactionPlugin]}
+                  initialView="dayGridMonth"
+                  locale="pt-br"
+                  height={480}
+                  contentHeight={480}
+                  headerToolbar={{
+                    left: 'prev,next today',
+                    center: '',
+                    right: 'title'
+                  }}
+                  buttonText={{ today: 'Hoje' }}
+                  events={allEvents}
+                  eventClick={handleEventClick}
+                  dateClick={handleDateClick}
+                />
+              </Card>
+            </section>
+          </ScrollReveal>
+          <ScrollReveal direction="up" delay={200}>
+            {/* Legenda de cores */}
+            <div className="flex flex-wrap gap-4 items-center justify-center my-4">
+              <div className="flex items-center gap-2">
+                <span className="inline-block w-4 h-4 rounded-full" style={{ background: 'var(--event-ceia)' }} />
+                <span className="text-sm">Ceia do Senhor</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="inline-block w-4 h-4 rounded-full" style={{ background: 'var(--event-missoes)' }} />
+                <span className="text-sm">Missões</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="inline-block w-4 h-4 rounded-full" style={{ background: 'var(--event-juventude)' }} />
+                <span className="text-sm">Juventude</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="inline-block w-4 h-4 rounded-full" style={{ background: 'var(--event-casais)' }} />
+                <span className="text-sm">Casais</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="inline-block w-4 h-4 rounded-full" style={{ background: 'var(--event-culto-adm)' }} />
+                <span className="text-sm">Culto Administrativo</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="inline-block w-4 h-4 rounded-full" style={{ background: 'var(--event-fixo)' }} />
+                <span className="text-sm">Programação Fixa</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="inline-block w-4 h-4 rounded-full" style={{ background: 'var(--event-comemorativo)' }} />
+                <span className="text-sm">Comemorativo</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="inline-block w-4 h-4 rounded-full" style={{ background: 'var(--event-geral)' }} />
+                <span className="text-sm">Geral/Outros</span>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="inline-block w-4 h-4 rounded-full" style={{ background: 'var(--event-missoes)' }} />
-              <span className="text-sm">Missões</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="inline-block w-4 h-4 rounded-full" style={{ background: 'var(--event-juventude)' }} />
-              <span className="text-sm">Juventude</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="inline-block w-4 h-4 rounded-full" style={{ background: 'var(--event-casais)' }} />
-              <span className="text-sm">Casais</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="inline-block w-4 h-4 rounded-full" style={{ background: 'var(--event-culto-adm)' }} />
-              <span className="text-sm">Culto Administrativo</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="inline-block w-4 h-4 rounded-full" style={{ background: 'var(--event-fixo)' }} />
-              <span className="text-sm">Programação Fixa</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="inline-block w-4 h-4 rounded-full" style={{ background: 'var(--event-comemorativo)' }} />
-              <span className="text-sm">Comemorativo</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="inline-block w-4 h-4 rounded-full" style={{ background: 'var(--event-geral)' }} />
-              <span className="text-sm">Geral/Outros</span>
-            </div>
-          </div>
-          {/* Panorama geral */}
-          <section>
-            <h2 className="text-xl font-semibold mb-4">Panorama Geral dos Meses</h2>
-            <div id="calendar-panorama" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {[...Array(12)].map((_, i) => (
-                <Card key={i} className="rounded-3xl border p-4 shadow-2xl">
-                  <FullCalendar
-                    plugins={[dayGridPlugin, interactionPlugin]}
-                    initialView="dayGridMonth"
-                    locale="pt-br"
-                    height={350}
-                    headerToolbar={false}
-                    events={allEvents}
-                    initialDate={`2026-${String(i+1).padStart(2, '0')}-01`}
-                    dayMaxEventRows={3}
-                    eventClick={handleEventClick}
-                    dateClick={handleDateClick}
-                  />
-                  <div className="text-center font-semibold mt-2">
-                    {new Date(2026, i).toLocaleString('pt-BR', { month: 'long' }).toUpperCase()}
-                  </div>
-                </Card>
-              ))}
-            </div>
-          </section>
+          </ScrollReveal>
+          <ScrollReveal direction="up" delay={400}>
+            {/* Panorama geral */}
+            <section>
+              <h2 className="text-xl font-semibold mb-4">Panorama Geral dos Meses</h2>
+              <div id="calendar-panorama" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {[...Array(12)].map((_, i) => (
+                  <Card key={i} className="rounded-3xl border p-4 shadow-2xl">
+                    <FullCalendar
+                      plugins={[dayGridPlugin, interactionPlugin]}
+                      initialView="dayGridMonth"
+                      locale="pt-br"
+                      height={350}
+                      headerToolbar={false}
+                      events={allEvents}
+                      initialDate={`2026-${String(i+1).padStart(2, '0')}-01`}
+                      dayMaxEventRows={3}
+                      eventClick={handleEventClick}
+                      dateClick={handleDateClick}
+                    />
+                    <div className="text-center font-semibold mt-2">
+                      {new Date(2026, i).toLocaleString('pt-BR', { month: 'long' }).toUpperCase()}
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </section>
+          </ScrollReveal>
         </>
       )}
     </div>
