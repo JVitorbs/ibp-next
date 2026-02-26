@@ -32,6 +32,7 @@ export default function Navigation() {
           <Link href="/pg"><Button variant="ghost">Pequenos Grupos</Button></Link>
           <Link href="/galeria"><Button variant="ghost">Galeria</Button></Link>
           <Link href="/#contato"><Button variant="ghost">Contato</Button></Link>
+          <Link href="/calendario"><Button variant="ghost">Calendário</Button></Link>
         </div>
 
         {/* Menu Mobile */}
@@ -51,6 +52,7 @@ export default function Navigation() {
               <Link href="/pg"><Button variant="ghost" className="w-full justify-start">Pequenos Grupos</Button></Link>
               <Link href="/galeria"><Button variant="ghost" className="w-full justify-start">Galeria</Button></Link>
               <Link href="/#contato"><Button variant="ghost" className="w-full justify-start">Contato</Button></Link>
+              <Link href="/calendario"><Button variant="ghost" className="w-full justify-start">Calendário</Button></Link>
             </div>
           </SheetContent>
         </Sheet>
