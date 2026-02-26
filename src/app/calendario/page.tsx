@@ -1,12 +1,12 @@
 "use client";
-import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import multiMonthPlugin from '@fullcalendar/multimonth';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import { Card } from '@/components/ui/card';
 import EventInfoModal from './EventInfoModal';
 import { getEventColor } from './utils';
-import { ScrollReveal } from "@/components/ScrollReveal";
+import dynamic from "next/dynamic";
+import React, { useEffect, useState, ReactNode, useMemo } from 'react';
 
 const eventos = [
   // Fevereiro
@@ -97,17 +97,43 @@ const allEvents = [...eventos, ...programacoesFixas].map(ev => ({
 }));
 
 
-import React, { useEffect, useState } from 'react';
+// Carrega FullCalendar dinamicamente para evitar SSR
+const FullCalendar = dynamic(() => import('@fullcalendar/react'), { ssr: false });
+
+// Componente local para revelar apenas ao carregar
+function CalendarReveal({ children, direction = "left", delay = 0 }: { children: ReactNode; direction?: "left" | "right" | "up" | "down"; delay?: number }) {
+  const [isVisible, setIsVisible] = useState(false);
+  useEffect(() => {
+    const timeout = setTimeout(() => setIsVisible(true), delay);
+    return () => clearTimeout(timeout);
+  }, [delay]);
+  const getTransformClass = () => {
+    if (isVisible) return "";
+    switch (direction) {
+      case "left": return "-translate-x-24";
+      case "right": return "translate-x-24";
+      case "up": return "translate-y-24";
+      case "down": return "-translate-y-24";
+      default: return "";
+    }
+  };
+  return (
+    <div
+      className={`${getTransformClass()} ${isVisible ? "opacity-100" : "opacity-0"} duration-700 transition-all`}
+      style={{ transitionDelay: isVisible ? `${delay}ms` : "0ms" }}
+    >
+      {children}
+    </div>
+  );
+}
 
 const CalendarPage = () => {
-      const [isClient, setIsClient] = useState(false);
-      useEffect(() => {
-        setIsClient(true);
-      }, []);
-    if (typeof window !== 'undefined') {
-      // eslint-disable-next-line no-console
-      console.log('CalendarPage renderizou no client');
-    }
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => { setIsClient(true); }, []);
+
+  // Memoiza eventos para evitar recomputação
+  const memoAllEvents = useMemo(() => allEvents, []);
+
   const [open, setOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedEvents, setSelectedEvents] = useState<any[]>([]);
@@ -129,7 +155,7 @@ const CalendarPage = () => {
   function getEventsOfDay(date: string) {
     const dayOfWeek = new Date(date).getDay();
     const normDate = normalizeDate(date);
-    const result = allEvents.filter(ev => {
+    const result = memoAllEvents.filter(ev => {
       // Evento de um dia específico
       if ('date' in ev && ev.date && normalizeDate(ev.date) === normDate) return true;
       // Evento de múltiplos dias
@@ -176,7 +202,7 @@ const CalendarPage = () => {
     <div className="flex flex-col gap-8 p-8 bg-primary/30">
       {isClient && (
         <>
-          <ScrollReveal direction="up">
+          <CalendarReveal direction="up">
             {/* Modal/Card central customizado */}
             <EventInfoModal
               open={open}
@@ -230,14 +256,14 @@ const CalendarPage = () => {
                     right: 'title'
                   }}
                   buttonText={{ today: 'Hoje' }}
-                  events={allEvents}
+                  events={memoAllEvents}
                   eventClick={handleEventClick}
                   dateClick={handleDateClick}
                 />
               </Card>
             </section>
-          </ScrollReveal>
-          <ScrollReveal direction="up" delay={200}>
+          </CalendarReveal>
+          <CalendarReveal direction="up" delay={200}>
             {/* Legenda de cores */}
             <div className="flex flex-wrap gap-4 items-center justify-center my-4">
               <div className="flex items-center gap-2">
@@ -273,8 +299,8 @@ const CalendarPage = () => {
                 <span className="text-sm">Geral/Outros</span>
               </div>
             </div>
-          </ScrollReveal>
-          <ScrollReveal direction="up" delay={400}>
+          </CalendarReveal>
+          <CalendarReveal direction="up" delay={400}>
             {/* Panorama geral */}
             <section>
               <h2 className="text-xl font-semibold mb-4">Panorama Geral dos Meses</h2>
@@ -287,7 +313,7 @@ const CalendarPage = () => {
                       locale="pt-br"
                       height={350}
                       headerToolbar={false}
-                      events={allEvents}
+                      events={memoAllEvents}
                       initialDate={`2026-${String(i+1).padStart(2, '0')}-01`}
                       dayMaxEventRows={3}
                       eventClick={handleEventClick}
@@ -300,7 +326,7 @@ const CalendarPage = () => {
                 ))}
               </div>
             </section>
-          </ScrollReveal>
+          </CalendarReveal>
         </>
       )}
     </div>
