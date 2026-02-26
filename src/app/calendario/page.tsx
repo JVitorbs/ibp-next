@@ -4,22 +4,10 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import multiMonthPlugin from '@fullcalendar/multimonth';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import { Card } from '@/components/ui/card';
+import EventInfoModal from './EventInfoModal';
+import { getEventColor } from './utils';
 
 
-
-// Função para definir cor do evento
-function getEventColor(event: { title: string }): string {
-  const t = event.title.toLowerCase();
-  if (t.includes('ceia do senhor')) return 'var(--event-ceia)';
-  if (t.includes('miss')) return 'var(--event-missoes)';
-  if (t.includes('juventude') || t.includes('jovens')) return 'var(--event-juventude)';
-  if (t.includes('casais')) return 'var(--event-casais)';
-  if (t.includes('culto administrativo')) return 'var(--event-culto-adm)';
-  if (t.includes('vigília') || t.includes('treinamento') || t.includes('pgzão') || t.includes('assembleia') || t.includes('ação evangelística') || t.includes('encontro de promotores') || t.includes('proclamai') || t.includes('feira') || t.includes('estudo bíblico') || t.includes('chá de lenços')) return 'var(--event-geral)';
-  if (t.includes('instituto bíblico') || t.includes('oração matutina') || t === 'culto') return 'var(--event-fixo)';
-  if (t.includes('dia das mães') || t.includes('dia dos pais') || t.includes('crianças') || t.includes('natal') || t.includes('virada')) return 'var(--event-comemorativo)';
-  return 'var(--event-geral)';
-}
 
 const eventos = [
   // Fevereiro
@@ -190,55 +178,12 @@ const CalendarPage = () => {
       {isClient && (
         <>
           {/* Modal/Card central customizado */}
-          {open && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center">
-              {/* Backdrop com blur */}
-              <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setOpen(false)} />
-              <Card className="relative w-full max-w-md px-6 py-4 rounded-2xl shadow-2xl bg-background flex flex-col items-center z-10">
-                {/* Botão de fechar dentro do Card */}
-                <button
-                  className="absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none"
-                  onClick={() => setOpen(false)}
-                  aria-label="Fechar"
-                >
-                  <span aria-hidden="true">×</span>
-                </button>
-                <div className="w-full mt-2 text-center font-bold text-lg">Programações do dia</div>
-                <div className="text-center text-muted-foreground mb-2">
-                  {selectedDate && (
-                    <span>{new Date(selectedDate).toLocaleDateString('pt-BR')}</span>
-                  )}
-                </div>
-                <div className="pt-2 w-full">
-                  {selectedEvents.length > 0 ? (
-                    <ul className="space-y-2">
-                      {selectedEvents.map((ev, idx) => (
-                        <li key={idx} className="border-b pb-2 flex items-start gap-2">
-                          {/* Dot/bar colorido igual ao calendário */}
-                          <span
-                            className="inline-block mt-1 w-3 h-3 rounded-full shrink-0"
-                            style={{ background: getEventColor(ev) }}
-                            aria-hidden="true"
-                          />
-                          <div className="flex-1">
-                            <div className="font-semibold">{ev.title}</div>
-                            {('extendedProps' in ev && ev.extendedProps?.horario) && (
-                              <div className="text-sm text-muted-foreground">Horário: {ev.extendedProps.horario}</div>
-                            )}
-                            {('startTime' in ev && ev.startTime) && (
-                              <div className="text-sm text-muted-foreground">Horário: {ev.startTime}</div>
-                            )}
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <div className="text-muted-foreground">Nenhuma programação para este dia.</div>
-                  )}
-                </div>
-              </Card>
-            </div>
-          )}
+          <EventInfoModal
+            open={open}
+            onClose={() => setOpen(false)}
+            selectedDate={selectedDate}
+            selectedEvents={selectedEvents}
+          />
           {/* Mês atual */}
           <section>
             <h2 className="text-2xl font-bold mb-4">Calendário - Mês Atual</h2>
