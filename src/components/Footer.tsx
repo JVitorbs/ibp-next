@@ -56,6 +56,9 @@ export default function Footer() {
               <li>
                 <Link href="/#contato" className="text-muted-foreground hover:foreground transition">Contato</Link>
               </li>
+              <li>
+                <Link href="/calendario" className="text-muted-foreground hover:foreground transition">Calendário</Link>
+              </li>
             </ul>
           </div>
 
