@@ -24,8 +24,8 @@ export default function Navigation() {
 
         {/* Menu Desktop */}
         <div className="hidden md:flex gap-1">
-          <Link href="/#sobre"><Button variant="ghost">Sobre</Button></Link>
-          <Link href="/#missao"><Button variant="ghost">Missão</Button></Link>
+          {/*<Link href="/#sobre"><Button variant="ghost">Sobre</Button></Link>*/}
+          {/*<Link href="/#missao"><Button variant="ghost">Missão</Button></Link>*/}
           <Link href="/historia"><Button variant="ghost">História</Button></Link>
           <Link href="/diretoria"><Button variant="ghost">Diretoria</Button></Link>
           <Link href="/instituto-biblico"><Button variant="ghost">Instituto Bíblico</Button></Link>
@@ -44,8 +44,8 @@ export default function Navigation() {
           </SheetTrigger>
           <SheetContent side="right">
             <div className="flex flex-col gap-4 mt-8">
-              <Link href="/#sobre"><Button variant="ghost" className="w-full justify-start">Sobre</Button></Link>
-              <Link href="/#missao"><Button variant="ghost" className="w-full justify-start">Missão</Button></Link>
+              {/*<Link href="/#sobre"><Button variant="ghost" className="w-full justify-start">Sobre</Button></Link>*/}
+              {/*<Link href="/#missao"><Button variant="ghost" className="w-full justify-start">Missão</Button></Link>*/}
               <Link href="/historia"><Button variant="ghost" className="w-full justify-start">História</Button></Link>
               <Link href="/diretoria"><Button variant="ghost" className="w-full justify-start">Diretoria</Button></Link>
               <Link href="/instituto-biblico"><Button variant="ghost" className="w-full justify-start">Instituto Bíblico</Button></Link>
