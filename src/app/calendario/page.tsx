@@ -157,7 +157,12 @@ const CalendarPage = () => {
           side={undefined}
           className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-transparent shadow-none border-none p-0 flex items-center justify-center transition-all duration-200 ease-out scale-95 opacity-0 data-[state=open]:scale-100 data-[state=open]:opacity-100"
         >
-          <Card className="w-full max-w-md px-6 py-4 rounded-2xl shadow-2xl bg-background flex flex-col items-center">
+          <Card className="w-full max-w-md px-6 py-4 rounded-2xl shadow-2xl bg-background flex flex-col items-center relative">
+            {/* Botão de fechar dentro do Card */}
+            <SheetClose className="absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none">
+              <span aria-hidden="true">×</span>
+              <span className="sr-only">Fechar</span>
+            </SheetClose>
             <SheetHeader className="w-full">
               <SheetTitle className="mt-2 text-center w-full">Programações do dia</SheetTitle>
               <SheetDescription className="text-center">
