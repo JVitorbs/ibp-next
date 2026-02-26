@@ -174,7 +174,7 @@ const CalendarPage = () => {
   }
 
   return (
-    <div className="flex flex-col gap-8 p-8 bg-primary/40">
+    <div className="flex flex-col gap-8 p-8 bg-primary/30">
       {isClient && (
         <>
           {/* Modal/Card central customizado */}
@@ -236,6 +236,41 @@ const CalendarPage = () => {
               />
             </Card>
           </section>
+          {/* Legenda de cores */}
+          <div className="flex flex-wrap gap-4 items-center justify-center my-4">
+            <div className="flex items-center gap-2">
+              <span className="inline-block w-4 h-4 rounded-full" style={{ background: 'var(--event-ceia)' }} />
+              <span className="text-sm">Ceia do Senhor</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="inline-block w-4 h-4 rounded-full" style={{ background: 'var(--event-missoes)' }} />
+              <span className="text-sm">Missões</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="inline-block w-4 h-4 rounded-full" style={{ background: 'var(--event-juventude)' }} />
+              <span className="text-sm">Juventude</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="inline-block w-4 h-4 rounded-full" style={{ background: 'var(--event-casais)' }} />
+              <span className="text-sm">Casais</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="inline-block w-4 h-4 rounded-full" style={{ background: 'var(--event-culto-adm)' }} />
+              <span className="text-sm">Culto Administrativo</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="inline-block w-4 h-4 rounded-full" style={{ background: 'var(--event-fixo)' }} />
+              <span className="text-sm">Programação Fixa</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="inline-block w-4 h-4 rounded-full" style={{ background: 'var(--event-comemorativo)' }} />
+              <span className="text-sm">Comemorativo</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="inline-block w-4 h-4 rounded-full" style={{ background: 'var(--event-geral)' }} />
+              <span className="text-sm">Geral/Outros</span>
+            </div>
+          </div>
           {/* Panorama geral */}
           <section>
             <h2 className="text-xl font-semibold mb-4">Panorama Geral dos Meses</h2>
