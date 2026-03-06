@@ -36,14 +36,14 @@ const diretoria: Diretor[] = [
   },
   {
     role: "Diretoria Administrativa",
-    name: "Samá Silva",
+    name: "Aparecida Lima",
     description: "Registra atas, comunicados oficiais e acompanha a agenda institucional.",
     image: "/images/diretoria/adm1.jpg",
     category: "adminsitrativo",
   },
   {
     role: "Diretoria Administrativa",
-    name: "Aparecida Lima",
+    name: "Samá Silva",
     description: "Suporte administrativo, documentação e correspondências.",
     image: "/images/diretoria/adm2.jpg",
     category: "adminsitrativo",
