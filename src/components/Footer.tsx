@@ -30,7 +30,7 @@ export default function Footer() {
 
           <div>
             <h4 className="font-semibold mb-4">Links Rápidos</h4>
-            <ul className="space-y-2">
+            <ul className="grid grid-cols-2 gap-y-2 gap-x-6">
               <li>
                 <Link href="/" className="text-muted-foreground hover:foreground transition">Início</Link>
               </li>
