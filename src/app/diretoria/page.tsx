@@ -35,24 +35,31 @@ const diretoria: Diretor[] = [
     category: "vice",
   },
   {
-    role: "1º Secretário",
+    role: "Diretoria Administrativa",
     name: "Samá Silva",
     description: "Registra atas, comunicados oficiais e acompanha a agenda institucional.",
-    image: "/images/diretoria/secretario1.jpg",
+    image: "/images/diretoria/adm1.jpg",
     category: "adminsitrativo",
   },
   {
-    role: "2º Secretário",
+    role: "Diretoria Administrativa",
     name: "Aparecida Lima",
     description: "Suporte administrativo, documentação e correspondências.",
-    image: "/images/diretoria/secretario2.jpg",
+    image: "/images/diretoria/adm2.jpg",
     category: "adminsitrativo",
   },
   {
-    role: "Tesoureiro",
-    name: "Nome do Tesoureiro",
+    role: "Diretoria Administrativa",
+    name: "Marcílio Dias",
     description: "Administra finanças, presta contas e zela pela transparência.",
-    image: "/images/diretoria/tesoureiro.jpg",
+    image: "/images/diretoria/adm3.jpg",
+    category: "adminsitrativo",
+  },
+  {
+    role: "Diretoria Administrativa",
+    name: "Mateus Oliveira",
+    description: "Administra finanças, presta contas e zela pela transparência.",
+    image: "/images/diretoria/adm4.jpg",
     category: "adminsitrativo",
   },
   {
@@ -113,6 +120,8 @@ export default function DiretoriaPage() {
   const administrativo = diretoria.filter((p) => p.category === "adminsitrativo");
   const ministerios = diretoria.filter((p) => p.category === "ministerios");
 
+  const getMemberKey = (pessoa: Diretor) => `${pessoa.role}-${pessoa.name}`;
+
   const CardMember = ({ pessoa }: { pessoa: Diretor }) => (
     <div className="flex flex-col items-center px-2 py-2 md:px-4 md:py-4">
       <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden bg-muted flex items-center justify-center text-primary font-bold text-2xl md:text-3xl shadow-lg border-4 border-primary/20 mb-3 md:mb-4">
@@ -163,7 +172,7 @@ export default function DiretoriaPage() {
               <div className="flex justify-center">
                 <div className="relative">
                   {presidente.map((pessoa) => (
-                    <CardMember key={pessoa.role} pessoa={pessoa} />
+                    <CardMember key={getMemberKey(pessoa)} pessoa={pessoa} />
                   ))}
                 </div>
               </div>
@@ -183,7 +192,7 @@ export default function DiretoriaPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-2xl mx-auto">
                   {vicepresidentes.map((pessoa, idx) => (
                     <ScrollReveal
-                      key={pessoa.role}
+                      key={getMemberKey(pessoa)}
                       direction={idx === 0 ? "left" : "right"}
                       delay={250 + idx * 100}
                     >
@@ -202,16 +211,16 @@ export default function DiretoriaPage() {
               <div className="w-1 h-8 bg-primary/30"></div>
             </div>
 
-            {/* Administrativo (Secretários e Tesoureiro) */}
+            {/* Administrativo */}
             <ScrollReveal direction="up" delay={300}>
               <div className="relative">
                 <div className="flex justify-center mb-8">
                   <div className="w-48 h-1 bg-primary/30"></div>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-3xl mx-auto">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto">
                   {administrativo.map((pessoa, idx) => (
                     <ScrollReveal
-                      key={pessoa.role}
+                      key={getMemberKey(pessoa)}
                       direction="up"
                       delay={350 + idx * 100}
                     >
@@ -239,7 +248,7 @@ export default function DiretoriaPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-5xl mx-auto">
                   {ministerios.map((pessoa, idx) => (
                     <ScrollReveal
-                      key={pessoa.role}
+                      key={getMemberKey(pessoa)}
                       direction={idx % 2 === 0 ? "left" : "right"}
                       delay={450 + (idx % 4) * 100}
                     >
