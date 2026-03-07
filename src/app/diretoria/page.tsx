@@ -104,6 +104,13 @@ const diretoria: Diretor[] = [
     image: "/images/diretoria/infantil.jpg",
     category: "ministerios",
   },
+  {
+    role: "Ministério de Recepção",
+    name: "Responsável: Flávio e Aparecida",
+    description: "Cuida da recepção, acolhimento e orientação aos visitantes.",
+    image: "/images/diretoria/recepcao.jpg",
+    category: "ministerios",
+  },
 ];
 
 const getInitials = (name: string) => {
