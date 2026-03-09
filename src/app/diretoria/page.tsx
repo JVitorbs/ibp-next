@@ -167,6 +167,11 @@ export default async function DiretoriaPage() {
   const hasAdministrativo = administrativo.length > 0;
   const hasMinisterios = ministerios.length > 0;
 
+  const getLinhaHorizontalWidth = (count: number, min: number, max: number, step: number) => {
+    const width = min + Math.max(0, count - 1) * step;
+    return `${Math.min(max, width)}px`;
+  };
+
   const getMemberKey = (pessoa: Diretor) => `${pessoa.role}-${pessoa.name}`;
 
   const CardMember = ({ pessoa }: { pessoa: Diretor }) => (
@@ -184,6 +189,15 @@ export default async function DiretoriaPage() {
       </div>
       <h3 className="text-center font-semibold text-foreground text-base md:text-lg mb-1">{pessoa.role}</h3>
       <p className="text-center text-primary text-sm md:text-base">{pessoa.name}</p>
+    </div>
+  );
+
+  const HorizontalConnector = ({ width }: { width: string }) => (
+    <div className="flex justify-center mb-8" aria-hidden="true">
+      <div
+        className="h-px rounded-full bg-linear-to-r from-transparent via-primary/45 to-transparent"
+        style={{ width }}
+      />
     </div>
   );
 
@@ -227,21 +241,14 @@ export default async function DiretoriaPage() {
               </ScrollReveal>
             )}
 
-            {/* Linha conectora */}
-            {hasPresidente && hasVicepresidentes && (
-              <div className="flex justify-center">
-                <div className="w-1 h-8 bg-primary/30"></div>
-              </div>
-            )}
-
             {/* Vice-Presidentes */}
             {hasVicepresidentes && (
               <ScrollReveal direction="left" delay={200}>
                 <div className="relative">
                   {vicepresidentes.length > 1 && (
-                    <div className="flex justify-center mb-8">
-                      <div className="w-32 h-1 bg-primary/30"></div>
-                    </div>
+                    <HorizontalConnector
+                      width={getLinhaHorizontalWidth(vicepresidentes.length, 140, 420, 120)}
+                    />
                   )}
                   <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-8 max-w-2xl mx-auto">
                     {vicepresidentes.map((pessoa, idx) => (
@@ -251,7 +258,6 @@ export default async function DiretoriaPage() {
                         delay={250 + idx * 100}
                       >
                         <div className="flex flex-col items-center">
-                          <div className="w-1 h-6 bg-primary/30 mb-2"></div>
                           <CardMember pessoa={pessoa} />
                         </div>
                       </ScrollReveal>
@@ -261,21 +267,14 @@ export default async function DiretoriaPage() {
               </ScrollReveal>
             )}
 
-            {/* Linha conectora */}
-            {hasVicepresidentes && hasAdministrativo && (
-              <div className="flex justify-center">
-                <div className="w-1 h-8 bg-primary/30"></div>
-              </div>
-            )}
-
             {/* Administrativo */}
             {hasAdministrativo && (
               <ScrollReveal direction="up" delay={300}>
                 <div className="relative">
                   {administrativo.length > 1 && (
-                    <div className="flex justify-center mb-8">
-                      <div className="w-48 h-1 bg-primary/30"></div>
-                    </div>
+                    <HorizontalConnector
+                      width={getLinhaHorizontalWidth(administrativo.length, 170, 560, 105)}
+                    />
                   )}
                   <div className="grid grid-cols-[repeat(auto-fit,minmax(190px,1fr))] gap-8 max-w-4xl mx-auto">
                     {administrativo.map((pessoa, idx) => (
@@ -285,7 +284,6 @@ export default async function DiretoriaPage() {
                         delay={350 + idx * 100}
                       >
                         <div className="flex flex-col items-center">
-                          <div className="w-1 h-6 bg-primary/30 mb-2"></div>
                           <CardMember pessoa={pessoa} />
                         </div>
                       </ScrollReveal>
@@ -295,21 +293,14 @@ export default async function DiretoriaPage() {
               </ScrollReveal>
             )}
 
-            {/* Linha conectora */}
-            {hasAdministrativo && hasMinisterios && (
-              <div className="flex justify-center">
-                <div className="w-1 h-8 bg-primary/30"></div>
-              </div>
-            )}
-
             {/* Líderes de Ministérios */}
             {hasMinisterios && (
               <ScrollReveal direction="up" delay={400}>
                 <div className="relative">
                   {ministerios.length > 1 && (
-                    <div className="flex justify-center mb-8">
-                      <div className="w-full max-w-5xl h-1 bg-primary/30"></div>
-                    </div>
+                    <HorizontalConnector
+                      width={getLinhaHorizontalWidth(ministerios.length, 200, 920, 95)}
+                    />
                   )}
                   <div className="grid grid-cols-[repeat(auto-fit,minmax(210px,1fr))] gap-8 max-w-5xl mx-auto">
                     {ministerios.map((pessoa, idx) => (
@@ -319,7 +310,6 @@ export default async function DiretoriaPage() {
                         delay={450 + (idx % 4) * 100}
                       >
                         <div className="flex flex-col items-center">
-                          <div className="w-1 h-6 bg-primary/30 mb-2"></div>
                           <CardMember pessoa={pessoa} />
                         </div>
                       </ScrollReveal>
