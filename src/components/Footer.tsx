@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { SiInstagram } from "react-icons/si";
+import { SiInstagram, SiYoutube } from "react-icons/si";
 import { Mail } from "lucide-react";
 
 export default function Footer() {
@@ -69,8 +69,11 @@ export default function Footer() {
             <a href="mailto:somosibp@gmail.com" className="text-muted-foreground text-sm flex items-center gap-2 mb-2">
               <Mail className="w-5 h-5" /> <span>somosibp@gmail.com</span>
             </a>
-            <a href="https://www.instagram.com/somosibp" className="text-muted-foreground text-sm flex items-center gap-2" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.instagram.com/somosibp" className="text-muted-foreground text-sm flex items-center gap-2 mb-2" target="_blank" rel="noopener noreferrer">
               <SiInstagram className="w-5 h-5" /> <span>@somosibp</span>
+            </a>
+            <a href="https://youtube.com/@somosibp600?si=kjrSYFeji6Ro4gqS" className="text-muted-foreground text-sm flex items-center gap-2" target="_blank" rel="noopener noreferrer">
+              <SiYoutube className="w-5 h-5" /> <span>somosibp</span>
             </a>
           </div>
         </div>
