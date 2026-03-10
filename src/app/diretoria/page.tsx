@@ -132,6 +132,13 @@ const diretoria: Diretor[] = [
     image: "/images/diretoria/vice2.png",
     category: "ministerios",
   },
+    {
+    role: "Ministério de Estacionamento",
+    name: "Responsável: Elias",
+    description: "Cuida da manutenção e organização do estacionamento da igreja.",
+    image: "/images/diretoria/estacionamento.jpg",
+    category: "ministerios",
+  },
 ];
 
 const getInitials = (name: string) => {
