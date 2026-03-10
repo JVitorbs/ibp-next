@@ -1,7 +1,7 @@
-"use client";
-
 import Footer from "@/components/Footer";
 import { ScrollReveal } from "@/components/ScrollReveal";
+import { readdir } from "node:fs/promises";
+import path from "node:path";
 
 interface Diretor {
   role: string;
@@ -63,24 +63,10 @@ const diretoria: Diretor[] = [
     category: "adminsitrativo",
   },
   {
-    role: "Ministério de Louvor",
-    name: "Responsável: Pr. Diego Sousa",
-    description: "Coordena a equipe de louvor e a programação musical.",
-    image: "/images/diretoria/louvor.jpg",
-    category: "ministerios",
-  },
-  {
-    role: "Ministério de Educação Cristã",
-    name: "Responsável: Nome",
-    description: "Supervisiona EBD, discipulado e formações.",
-    image: "/images/diretoria/educacao.jpg",
-    category: "ministerios",
-  },
-  {
     role: "Ministério de Ação Social",
     name: "Responsável: Ana Lúcia",
     description: "Conduz projetos sociais e apoio à comunidade.",
-    image: "/images/diretoria/acao-social.jpg",
+    image: "/images/diretoria/vice1.jpg",
     category: "ministerios",
   },
   {
@@ -111,6 +97,48 @@ const diretoria: Diretor[] = [
     image: "/images/diretoria/recepcao.jpg",
     category: "ministerios",
   },
+  {
+    role: "Conselho Missionário",
+    name: "Responsável: Aparecida",
+    description: "Responsável por coordenar e mobilizar as atividades missionárias da igreja.",
+    image: "/images/diretoria/adm1.jpg",
+    category: "ministerios",
+  },
+  {
+    role: "Ministério de Casais",
+    name: "Responsável: Pr. Diego Sousa e Ana Paula",
+    description: "Acompanha e orienta os casais, promovendo encontros e atividades.",
+    image: "/images/diretoria/casais.jpg",
+    category: "ministerios",
+  },
+  {
+    role: "Ministério de Intercessão",
+    name: "Responsável: Mary",
+    description: "Responsável por coordenar as atividades de intercessão e oração da igreja.",
+    image: "/images/diretoria/intercessao.jpg",
+    category: "ministerios",
+  },
+  {
+    role: "Ministério de Visitação",
+    name: "Responsável: Ana Lúcia",
+    description: "Cuida da visitação, acolhimento e orientação aos membros e visitantes.",
+    image: "/images/diretoria/vice1.jpg",
+    category: "ministerios",
+  },
+  {
+    role: "Ministério de Patrimônio",
+    name: "Responsável: Jair de Souza",
+    description: "Cuida da manutenção e preservação do patrimônio da igreja.",
+    image: "/images/diretoria/vice2.png",
+    category: "ministerios",
+  },
+    {
+    role: "Ministério de Estacionamento",
+    name: "Responsável: Elias",
+    description: "Cuida da manutenção e organização do estacionamento da igreja.",
+    image: "/images/diretoria/estacionamento.jpg",
+    category: "ministerios",
+  },
 ];
 
 const getInitials = (name: string) => {
@@ -121,11 +149,35 @@ const getInitials = (name: string) => {
   return (first + last).toUpperCase();
 };
 
-export default function DiretoriaPage() {
-  const presidente = diretoria.filter((p) => p.category === "presidente");
-  const vicepresidentes = diretoria.filter((p) => p.category === "vice");
-  const administrativo = diretoria.filter((p) => p.category === "adminsitrativo");
-  const ministerios = diretoria.filter((p) => p.category === "ministerios");
+export default async function DiretoriaPage() {
+  const diretoriaPath = path.join(process.cwd(), "public", "images", "diretoria");
+  const arquivosDiretoria = await readdir(diretoriaPath);
+  const imagensDisponiveis = new Set(arquivosDiretoria.map((arquivo) => arquivo.toLowerCase()));
+
+  const temFoto = (pessoa: Diretor) => {
+    const imagem = pessoa.image?.trim();
+    if (!imagem) return false;
+
+    const nomeArquivo = path.basename(imagem).toLowerCase();
+    return imagensDisponiveis.has(nomeArquivo);
+  };
+
+  const diretoriaComFoto = diretoria.filter(temFoto);
+
+  const presidente = diretoriaComFoto.filter((p) => p.category === "presidente");
+  const vicepresidentes = diretoriaComFoto.filter((p) => p.category === "vice");
+  const administrativo = diretoriaComFoto.filter((p) => p.category === "adminsitrativo");
+  const ministerios = diretoriaComFoto.filter((p) => p.category === "ministerios");
+
+  const hasPresidente = presidente.length > 0;
+  const hasVicepresidentes = vicepresidentes.length > 0;
+  const hasAdministrativo = administrativo.length > 0;
+  const hasMinisterios = ministerios.length > 0;
+
+  const getLinhaHorizontalWidth = (count: number, min: number, max: number, step: number) => {
+    const width = min + Math.max(0, count - 1) * step;
+    return `${Math.min(max, width)}px`;
+  };
 
   const getMemberKey = (pessoa: Diretor) => `${pessoa.role}-${pessoa.name}`;
 
@@ -144,6 +196,15 @@ export default function DiretoriaPage() {
       </div>
       <h3 className="text-center font-semibold text-foreground text-base md:text-lg mb-1">{pessoa.role}</h3>
       <p className="text-center text-primary text-sm md:text-base">{pessoa.name}</p>
+    </div>
+  );
+
+  const HorizontalConnector = ({ width }: { width: string }) => (
+    <div className="flex justify-center mb-8" aria-hidden="true">
+      <div
+        className="h-px rounded-full bg-linear-to-r from-transparent via-primary/45 to-transparent"
+        style={{ width }}
+      />
     </div>
   );
 
@@ -175,99 +236,95 @@ export default function DiretoriaPage() {
           {/* Organograma em Cascata */}
           <div className="space-y-12">
             {/* Presidente */}
-            <ScrollReveal direction="down" delay={100}>
-              <div className="flex justify-center">
-                <div className="relative">
-                  {presidente.map((pessoa) => (
-                    <CardMember key={getMemberKey(pessoa)} pessoa={pessoa} />
-                  ))}
+            {hasPresidente && (
+              <ScrollReveal direction="down" delay={100}>
+                <div className="flex justify-center">
+                  <div className="relative">
+                    {presidente.map((pessoa) => (
+                      <CardMember key={getMemberKey(pessoa)} pessoa={pessoa} />
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </ScrollReveal>
-
-            {/* Linha conectora */}
-            <div className="flex justify-center">
-              <div className="w-1 h-8 bg-primary/30"></div>
-            </div>
+              </ScrollReveal>
+            )}
 
             {/* Vice-Presidentes */}
-            <ScrollReveal direction="left" delay={200}>
-              <div className="relative">
-                <div className="flex justify-center mb-8">
-                  <div className="w-32 h-1 bg-primary/30"></div>
+            {hasVicepresidentes && (
+              <ScrollReveal direction="left" delay={200}>
+                <div className="relative">
+                  {vicepresidentes.length > 1 && (
+                    <HorizontalConnector
+                      width={getLinhaHorizontalWidth(vicepresidentes.length, 140, 420, 120)}
+                    />
+                  )}
+                  <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-8 max-w-2xl mx-auto">
+                    {vicepresidentes.map((pessoa, idx) => (
+                      <ScrollReveal
+                        key={getMemberKey(pessoa)}
+                        direction={idx === 0 ? "left" : "right"}
+                        delay={250 + idx * 100}
+                      >
+                        <div className="flex flex-col items-center">
+                          <CardMember pessoa={pessoa} />
+                        </div>
+                      </ScrollReveal>
+                    ))}
+                  </div>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-2xl mx-auto">
-                  {vicepresidentes.map((pessoa, idx) => (
-                    <ScrollReveal
-                      key={getMemberKey(pessoa)}
-                      direction={idx === 0 ? "left" : "right"}
-                      delay={250 + idx * 100}
-                    >
-                      <div className="flex flex-col items-center">
-                        <div className="w-1 h-6 bg-primary/30 mb-2"></div>
-                        <CardMember pessoa={pessoa} />
-                      </div>
-                    </ScrollReveal>
-                  ))}
-                </div>
-              </div>
-            </ScrollReveal>
-
-            {/* Linha conectora */}
-            <div className="flex justify-center">
-              <div className="w-1 h-8 bg-primary/30"></div>
-            </div>
+              </ScrollReveal>
+            )}
 
             {/* Administrativo */}
-            <ScrollReveal direction="up" delay={300}>
-              <div className="relative">
-                <div className="flex justify-center mb-8">
-                  <div className="w-48 h-1 bg-primary/30"></div>
+            {hasAdministrativo && (
+              <ScrollReveal direction="up" delay={300}>
+                <div className="relative">
+                  {administrativo.length > 1 && (
+                    <HorizontalConnector
+                      width={getLinhaHorizontalWidth(administrativo.length, 170, 560, 105)}
+                    />
+                  )}
+                  <div className="grid grid-cols-[repeat(auto-fit,minmax(190px,1fr))] gap-8 max-w-4xl mx-auto">
+                    {administrativo.map((pessoa, idx) => (
+                      <ScrollReveal
+                        key={getMemberKey(pessoa)}
+                        direction="up"
+                        delay={350 + idx * 100}
+                      >
+                        <div className="flex flex-col items-center">
+                          <CardMember pessoa={pessoa} />
+                        </div>
+                      </ScrollReveal>
+                    ))}
+                  </div>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto">
-                  {administrativo.map((pessoa, idx) => (
-                    <ScrollReveal
-                      key={getMemberKey(pessoa)}
-                      direction="up"
-                      delay={350 + idx * 100}
-                    >
-                      <div className="flex flex-col items-center">
-                        <div className="w-1 h-6 bg-primary/30 mb-2"></div>
-                        <CardMember pessoa={pessoa} />
-                      </div>
-                    </ScrollReveal>
-                  ))}
-                </div>
-              </div>
-            </ScrollReveal>
-
-            {/* Linha conectora */}
-            <div className="flex justify-center">
-              <div className="w-1 h-8 bg-primary/30"></div>
-            </div>
+              </ScrollReveal>
+            )}
 
             {/* Líderes de Ministérios */}
-            <ScrollReveal direction="up" delay={400}>
-              <div className="relative">
-                <div className="flex justify-center mb-8">
-                  <div className="w-full max-w-5xl h-1 bg-primary/30"></div>
+            {hasMinisterios && (
+              <ScrollReveal direction="up" delay={400}>
+                <div className="relative">
+                  {ministerios.length > 1 && (
+                    <HorizontalConnector
+                      width={getLinhaHorizontalWidth(ministerios.length, 200, 920, 95)}
+                    />
+                  )}
+                  <div className="grid grid-cols-[repeat(auto-fit,minmax(210px,1fr))] gap-8 max-w-5xl mx-auto">
+                    {ministerios.map((pessoa, idx) => (
+                      <ScrollReveal
+                        key={getMemberKey(pessoa)}
+                        direction={idx % 2 === 0 ? "left" : "right"}
+                        delay={450 + (idx % 4) * 100}
+                      >
+                        <div className="flex flex-col items-center">
+                          <CardMember pessoa={pessoa} />
+                        </div>
+                      </ScrollReveal>
+                    ))}
+                  </div>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-5xl mx-auto">
-                  {ministerios.map((pessoa, idx) => (
-                    <ScrollReveal
-                      key={getMemberKey(pessoa)}
-                      direction={idx % 2 === 0 ? "left" : "right"}
-                      delay={450 + (idx % 4) * 100}
-                    >
-                      <div className="flex flex-col items-center">
-                        <div className="w-1 h-6 bg-primary/30 mb-2"></div>
-                        <CardMember pessoa={pessoa} />
-                      </div>
-                    </ScrollReveal>
-                  ))}
-                </div>
-              </div>
-            </ScrollReveal>
+              </ScrollReveal>
+            )}
           </div>
 
           <div className="mt-16 text-center">
