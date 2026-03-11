@@ -66,6 +66,9 @@ export default function AboutSection() {
                   Nós somos a IBP. Uma igreja comprometida com o Reino de Deus, empenhada em alcançar pessoas e ajudá-las a terem um relacionamento crescente com Jesus.
                 </p>
                 <p className="text-white text-lg leading-relaxed">
+                  Somos uma igreja Batista por convicção e vinculados a Convenção Batista Brasileira (CBB).
+                </p>
+                <p className="text-white text-lg leading-relaxed">
                   Vem ser igreja com a gente e experimentar o novo de Deus na sua vida.
                 </p>
               </CardContent>
