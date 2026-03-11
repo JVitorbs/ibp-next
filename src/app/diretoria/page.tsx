@@ -63,13 +63,6 @@ const diretoria: Diretor[] = [
     category: "adminsitrativo",
   },
   {
-    role: "Ministério de Ação Social",
-    name: "Responsável: Ana Lúcia",
-    description: "Conduz projetos sociais e apoio à comunidade.",
-    image: "/images/diretoria/vice1.jpg",
-    category: "ministerios",
-  },
-  {
     role: "Ministério de Comunicação",
     name: "Responsável: Débora Dias",
     description: "Comunicação interna, mídias sociais e avisos oficiais.",
