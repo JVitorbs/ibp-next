@@ -302,7 +302,7 @@ export default async function DiretoriaPage() {
                       width={getLinhaHorizontalWidth(ministerios.length, 200, 920, 95)}
                     />
                   )}
-                  <div className="grid grid-cols-[repeat(auto-fit,minmax(210px,1fr))] gap-8 max-w-5xl mx-auto">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8 max-w-6xl mx-auto">
                     {ministerios.map((pessoa, idx) => (
                       <ScrollReveal
                         key={getMemberKey(pessoa)}
