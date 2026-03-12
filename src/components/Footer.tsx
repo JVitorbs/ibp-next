@@ -17,13 +17,27 @@ export default function Footer() {
               <Image
                 src="/logos_Ibp/logo_redonda.png"
                 alt="Logo Igreja Batista do Pirangi"
-                width={30}
-                height={30}
+                width={40}
+                height={40}
                 className="drop-shadow-lg"
               />
-              IBP
+              <Image
+                src="/logos_Ibp/logo_CBNR.png"
+                alt="Logo Convenção Batista Norte-Rio-Grandense"
+                width={40}
+                height={40}
+                className="drop-shadow-lg"
+              />
+              <Image
+                src="/logos_Ibp/logo_CBB.png"
+                alt="Logo Convenção Batista Brasileira"
+                width={40}
+                height={40}
+                className="drop-shadow-lg"
+              />
+              
               </h3>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground mt-2">
               Igreja Batista do Pirangi - Bíblica, Integral e Relevante
             </p>
           </div>

@@ -63,13 +63,6 @@ const diretoria: Diretor[] = [
     category: "adminsitrativo",
   },
   {
-    role: "Ministério de Ação Social",
-    name: "Responsável: Ana Lúcia",
-    description: "Conduz projetos sociais e apoio à comunidade.",
-    image: "/images/diretoria/vice1.jpg",
-    category: "ministerios",
-  },
-  {
     role: "Ministério de Comunicação",
     name: "Responsável: Débora Dias",
     description: "Comunicação interna, mídias sociais e avisos oficiais.",
@@ -309,7 +302,7 @@ export default async function DiretoriaPage() {
                       width={getLinhaHorizontalWidth(ministerios.length, 200, 920, 95)}
                     />
                   )}
-                  <div className="grid grid-cols-[repeat(auto-fit,minmax(210px,1fr))] gap-8 max-w-5xl mx-auto">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8 max-w-6xl mx-auto">
                     {ministerios.map((pessoa, idx) => (
                       <ScrollReveal
                         key={getMemberKey(pessoa)}
