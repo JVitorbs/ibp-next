@@ -32,6 +32,13 @@ export default function Historia() {
       image: "/images/historia/inicio.png",
     },
     {
+      year: "2011",
+      title: "Início da Expansão",
+      description: "Início da expansão da capela da comunidade de fé.",
+      type: "milestone",
+      image: "/images/historia/2011.png",
+    },
+    {
       year: "2013",
       title: "Reforma e Construção do Templo",
       description: "Grande reforma do templo com ampliação das instalações para acomodar o crescimento da igreja",
@@ -51,6 +58,41 @@ export default function Historia() {
       description: "Celebração de três décadas de ministério, testemunhando a fidelidade de Deus e o impacto na comunidade local.",
       type: "milestone",
       image: "/images/historia/desmontagem_templo.png",
+    },
+    {
+      year: "2014",
+      title: "Novo Templo",
+      description: "Após a reforma, a igreja contou com um novo templo que melhorou a experiência dos membros.",
+      type: "milestone",
+      image: "/images/historia/2014.png",
+    },
+    {
+      year: "2015",
+      title: "Fachada da Igreja em 2015",
+      description: "Registro da fachada em 2015, evidenciando a continuidade do processo de consolidação estrutural do templo.",
+      type: "milestone",
+      image: "/images/historia/2015.png",
+    },
+    {
+      year: "2017",
+      title: "Fachada da Igreja em 2017",
+      description: "Imagem da frente da igreja em 2017, representando o cuidado permanente com o espaço de culto e comunhão.",
+      type: "milestone",
+      image: "/images/historia/2017.png",
+    },
+    {
+      year: "2018",
+      title: "Fachada da Igreja em 2018",
+      description: "Registro da fachada em 2018, marcando mais uma etapa da caminhada da comunidade ao longo dos anos.",
+      type: "milestone",
+      image: "/images/historia/2018.png",
+    },
+    {
+      year: "2019",
+      title: "Fachada da Igreja em 2019",
+      description: "Fotografia da frente da igreja em 2019, preservando a memória recente e a identidade visual do templo.",
+      type: "milestone",
+      image: "/images/historia/2019.png",
     },
     {
       year: "2020",
@@ -75,6 +117,13 @@ export default function Historia() {
         "/images/historia/batismo_2023_1.png",
         "/images/historia/batismo_2023_2.jpg"
       ],
+    },
+    {
+      year: "2024",
+      title: "Melhorias na Estrutura",
+      description: "Ao longo dos anos, a igreja continuou a evoluir e melhorar suas instalações.",
+      type: "milestone",
+      image: "/images/historia/2024.png",
     },
   ];
 
