@@ -17,7 +17,7 @@ type YoutubeMeta = {
 const videos: VideoInput[] = [
   {
     url: "https://www.youtube.com/watch?v=A3__ZbP5lsA",
-    description: "Musical de Natal - A jornada da Redenção - em 2026.",
+    description: "Musical de Páscoa - A jornada da Redenção - em 2026.",
   },
   {
     url: "https://www.youtube.com/watch?v=uwHY_HIMDEE&t=486s",
