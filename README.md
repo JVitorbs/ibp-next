@@ -4,6 +4,9 @@
 
 Este projeto é o site institucional da Igreja Batista do Pirangi, desenvolvido com Next.js e React. O objetivo é apresentar informações sobre a igreja, sua história, missão, ministérios, pequenos grupos, Instituto Bíblico, contatos e programação, servindo como ponto de acolhimento, divulgação e comunicação para membros, visitantes e interessados.
 
+O endereço do nosso site é [https://somosibp.vercel.app/](https://somosibp.vercel.app/).
+
+
 ## Funcionalidades
 
 - **Página inicial**: Apresentação da igreja, missão, valores e convite à comunidade.
