@@ -1,6 +1,5 @@
 "use client";
 import { useState, useRef } from "react";
-import { ScrollReveal } from "@/components/ScrollReveal";
 import Image from "next/image";
 
 export default function GalleryClient({ images }: { images: string[] }) {
@@ -20,31 +19,28 @@ export default function GalleryClient({ images }: { images: string[] }) {
   }
   return (
     <div className="p-4">
-      <ScrollReveal direction="up">
-        <h1 className="text-3xl font-bold mb-6 text-center">Galeria de Fotos</h1>
-      </ScrollReveal>
-      <ScrollReveal direction="up" delay={100}>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4" ref={gridRef}>
-          {images.map((img) => (
-            <button
-              key={img}
-              className="focus:outline-none w-full"
-              onClick={() => setSelected(img)}
-              aria-label="Abrir imagem em destaque"
-            >
-              <div className="w-full aspect-square relative">
-                <Image
-                  src={`/images/galeria/${img}`}
-                  alt="Foto da galeria"
-                  fill
-                  className="rounded shadow hover:scale-105 transition-transform duration-200 object-cover"
-                  sizes="(max-width: 768px) 50vw, 25vw"
-                />
-              </div>
-            </button>
-          ))}
-        </div>
-      </ScrollReveal>
+      <h1 className="text-3xl font-bold mb-6 text-center">Galeria de Fotos</h1>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4" ref={gridRef}>
+        {images.map((img, index) => (
+          <button
+            key={img}
+            className="focus:outline-none w-full gallery-item-enter"
+            style={{ animationDelay: `${index * 70}ms` }}
+            onClick={() => setSelected(img)}
+            aria-label="Abrir imagem em destaque"
+          >
+            <div className="w-full aspect-square relative">
+              <Image
+                src={`/images/galeria/${img}`}
+                alt="Foto da galeria"
+                fill
+                className="rounded shadow hover:scale-105 transition-transform duration-200 object-cover"
+                sizes="(max-width: 768px) 50vw, 25vw"
+              />
+            </div>
+          </button>
+        ))}
+      </div>
       {selected && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center"
