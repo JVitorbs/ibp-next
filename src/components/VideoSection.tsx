@@ -113,11 +113,47 @@ export default function VideoSection() {
 
   const carouselVideos = useMemo(() => {
     if (parsedVideos.length <= 1) return parsedVideos;
-    return [...parsedVideos, ...parsedVideos, ...parsedVideos];
+    return [...parsedVideos, ...parsedVideos];
   }, [parsedVideos]);
 
-  const middleStartIndex = parsedVideos.length;
-  const middleEndIndex = parsedVideos.length * 2 - 1;
+  const loopSize = parsedVideos.length;
+  const maxTrackIndex = carouselVideos.length - 1;
+
+  const getSafeLoopIndex = () => {
+    if (parsedVideos.length <= 1) return 0;
+    return Math.max(0, Math.min(currentTrackIndexRef.current, maxTrackIndex));
+  };
+
+  const normalizeToFirstLoop = (index: number) => {
+    if (parsedVideos.length <= 1) return 0;
+    return index >= loopSize ? index - loopSize : index;
+  };
+
+  const goToNextTrack = () => {
+    if (parsedVideos.length <= 1) {
+      scrollToTrackIndex(0);
+      return;
+    }
+
+    const current = normalizeToFirstLoop(getSafeLoopIndex());
+    scrollToTrackIndex(current + 1);
+  };
+
+  const goToPrevTrack = () => {
+    if (parsedVideos.length <= 1) {
+      scrollToTrackIndex(0);
+      return;
+    }
+
+    let current = normalizeToFirstLoop(getSafeLoopIndex());
+
+    if (current === 0) {
+      scrollToTrackIndex(loopSize, false);
+      current = loopSize;
+    }
+
+    scrollToTrackIndex(current - 1);
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -196,13 +232,15 @@ export default function VideoSection() {
     let attempts = 0;
 
     const setInitialPosition = () => {
-      const target = cardRefs.current[middleStartIndex];
       const scroller = scrollerRef.current;
 
-      if (target && scroller) {
-        scroller.scrollTo({ left: target.offsetLeft, behavior: "auto" });
-        setTrackIndex(middleStartIndex);
-        currentTrackIndexRef.current = middleStartIndex;
+      if (scroller) {
+        scroller.scrollTo({ left: 0, behavior: "auto" });
+        requestAnimationFrame(() => {
+          scroller.scrollTo({ left: 0, behavior: "auto" });
+        });
+        setTrackIndex(0);
+        currentTrackIndexRef.current = 0;
         return;
       }
 
@@ -213,21 +251,17 @@ export default function VideoSection() {
     };
 
     requestAnimationFrame(setInitialPosition);
-  }, [middleStartIndex, parsedVideos.length]);
+  }, [parsedVideos.length]);
 
   useEffect(() => {
     if (!isVisible || isPaused || parsedVideos.length <= 1) return;
 
     const interval = setInterval(() => {
-      let nextTrack = currentTrackIndexRef.current + 1;
-      if (nextTrack > middleEndIndex) {
-        nextTrack = middleStartIndex;
-      }
-      scrollToTrackIndex(nextTrack);
+      goToNextTrack();
     }, 4500);
 
     return () => clearInterval(interval);
-  }, [isVisible, isPaused, middleEndIndex, middleStartIndex, parsedVideos.length]);
+  }, [isVisible, isPaused, parsedVideos.length]);
 
   useEffect(() => {
     const scroller = scrollerRef.current;
@@ -240,7 +274,7 @@ export default function VideoSection() {
         if (isAdjustingRef.current) return;
 
         const currentLeft = scroller.scrollLeft;
-        let closestIndex = trackIndex;
+        let closestIndex = 0;
         let closestDistance = Number.POSITIVE_INFINITY;
 
         cardRefs.current.forEach((card, index) => {
@@ -252,15 +286,14 @@ export default function VideoSection() {
           }
         });
 
+        currentTrackIndexRef.current = closestIndex;
         setTrackIndex(closestIndex);
 
-        if (parsedVideos.length > 1 && (closestIndex < middleStartIndex || closestIndex > middleEndIndex)) {
+        if (parsedVideos.length > 1 && closestIndex >= loopSize) {
           isAdjustingRef.current = true;
 
-          const correctedTrackIndex =
-            closestIndex < middleStartIndex
-              ? closestIndex + parsedVideos.length
-              : closestIndex - parsedVideos.length;
+          const correctedTrackIndex = closestIndex - loopSize;
+          currentTrackIndexRef.current = correctedTrackIndex;
           scrollToTrackIndex(correctedTrackIndex, false);
 
           requestAnimationFrame(() => {
@@ -277,7 +310,7 @@ export default function VideoSection() {
       scroller.removeEventListener("scroll", onScroll);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [middleEndIndex, middleStartIndex, parsedVideos.length, trackIndex]);
+  }, [loopSize, parsedVideos.length]);
 
   const pauseTemporarily = () => {
     setIsPaused(true);
@@ -318,11 +351,7 @@ export default function VideoSection() {
             className="h-10 w-10 rounded-full border border-primary/30 bg-white/80 hover:bg-white"
             onClick={() => {
               pauseTemporarily();
-              let prevTrack = trackIndex - 1;
-              if (parsedVideos.length > 1 && prevTrack < middleStartIndex) {
-                prevTrack = middleEndIndex;
-              }
-              scrollToTrackIndex(prevTrack);
+              goToPrevTrack();
             }}
           >
             <ChevronLeft className="h-5 w-5 mx-auto" />
@@ -333,11 +362,7 @@ export default function VideoSection() {
             className="h-10 w-10 rounded-full border border-primary/30 bg-white/80 hover:bg-white"
             onClick={() => {
               pauseTemporarily();
-              let nextTrack = trackIndex + 1;
-              if (parsedVideos.length > 1 && nextTrack > middleEndIndex) {
-                nextTrack = middleStartIndex;
-              }
-              scrollToTrackIndex(nextTrack);
+              goToNextTrack();
             }}
           >
             <ChevronRight className="h-5 w-5 mx-auto" />
@@ -346,7 +371,7 @@ export default function VideoSection() {
 
         <div
           ref={scrollerRef}
-          className="flex gap-5 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+          className="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
           onTouchStart={pauseTemporarily}
