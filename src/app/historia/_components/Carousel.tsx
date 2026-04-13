@@ -1,5 +1,6 @@
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
+import useEmblaCarousel from "embla-carousel-react";
 
 export interface CarouselProps {
   images: string[];
@@ -14,82 +15,52 @@ export function Carousel({
   fallbackBg,
   fallbackIcon,
 }: CarouselProps) {
-  const [current, setCurrent] = useState(0);
-  const [transition, setTransition] = useState<{
-    from: number;
-    to: number;
-    direction: "left" | "right";
-  } | null>(null);
-
-  const [offset, setOffset] = useState(0);
-  const [isSliding, setIsSliding] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const [errorIndexes, setErrorIndexes] = useState<number[]>([]);
-  const touchStartX = useRef<number | null>(null);
-
-  // 🔹 Preload compatível com next/image
-  const preloadImage = (src: string) =>
-    new Promise<void>((resolve) => {
-      const img = document.createElement("img");
-      img.src = src;
-      img.onload = () => resolve();
-      img.onerror = () => resolve();
-    });
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: true,
+    align: "center",
+  });
 
   const handleError = (idx: number) =>
-    setErrorIndexes((prev) =>
-      prev.includes(idx) ? prev : [...prev, idx]
-    );
+    setErrorIndexes((prev) => (prev.includes(idx) ? prev : [...prev, idx]));
 
-  const slideTo = async (to: number, direction: "left" | "right") => {
-    if (isSliding) return;
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
 
-    setIsSliding(true);
+  useEffect(() => {
+    if (!emblaApi) return;
 
-    // 🟢 garante que a próxima imagem já esteja no cache
-    await preloadImage(images[to]);
+    emblaApi.on("select", onSelect);
+    emblaApi.on("reInit", onSelect);
 
-    setTransition({ from: current, to, direction });
+    return () => {
+      emblaApi.off("select", onSelect);
+      emblaApi.off("reInit", onSelect);
+    };
+  }, [emblaApi, onSelect]);
 
-    if (direction === "right") {
-      setOffset(0);
-      requestAnimationFrame(() => setOffset(-100));
-    } else {
-      setOffset(-100);
-      requestAnimationFrame(() => setOffset(0));
-    }
+  useEffect(() => {
+    if (images.length <= 1) return;
 
-    setTimeout(() => {
-      setCurrent(to);
-      setTransition(null);
-      setOffset(0);
-      setIsSliding(false);
-    }, 500);
-  };
+    const total = images.length;
+    const nextIndex = (selectedIndex + 1) % total;
+    const prevIndex = (selectedIndex - 1 + total) % total;
+
+    [nextIndex, prevIndex].forEach((index) => {
+      const preload = new window.Image();
+      preload.src = images[index];
+    });
+  }, [selectedIndex, images]);
 
   const handleNext = () => {
-    const to = current === images.length - 1 ? 0 : current + 1;
-    slideTo(to, "right");
+    emblaApi?.scrollNext();
   };
 
   const handlePrev = () => {
-    const to = current === 0 ? images.length - 1 : current - 1;
-    slideTo(to, "left");
-  };
-
-  // 👉 Swipe
-  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
-    touchStartX.current = e.touches[0].clientX;
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
-    if (touchStartX.current === null) return;
-
-    const diff = e.changedTouches[0].clientX - touchStartX.current;
-    if (Math.abs(diff) > 50) {
-      diff > 0 ? handlePrev() : handleNext();
-    }
-
-    touchStartX.current = null;
+    emblaApi?.scrollPrev();
   };
 
   const renderImage = (idx: number, priority = false) =>
@@ -112,33 +83,15 @@ export function Carousel({
     );
 
   return (
-    <div
-      className="relative h-72 overflow-hidden bg-black/10"
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-    >
-      <div className="absolute inset-0">
-        {transition ? (
-          <div
-            className="flex h-full"
-            style={{
-              width: "200%",
-              transform: `translateX(${offset}%)`,
-              transition: "transform 0.5s cubic-bezier(0.4,0,0.2,1)",
-            }}
-          >
-            <div className="relative w-1/2 h-full">
-              {renderImage(transition.from)}
+    <div className="relative h-72 overflow-hidden bg-black/10">
+      <div className="h-full overflow-hidden" ref={emblaRef}>
+        <div className="flex h-full touch-pan-y">
+          {images.map((_, idx) => (
+            <div key={idx} className="relative min-w-0 shrink-0 grow-0 basis-full h-full">
+              {renderImage(idx, idx === selectedIndex)}
             </div>
-            <div className="relative w-1/2 h-full">
-              {renderImage(transition.to)}
-            </div>
-          </div>
-        ) : (
-          <div className="relative w-full h-full">
-            {renderImage(current, true)}
-          </div>
-        )}
+          ))}
+        </div>
       </div>
 
       {images.length > 1 && (
@@ -161,12 +114,20 @@ export function Carousel({
 
           <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
             {images.map((_, i) => (
-              <span
+              <button
                 key={i}
-                className={`w-2 h-2 rounded-full ${
-                  i === current ? "bg-primary" : "bg-white/50"
-                }`}
-              />
+                type="button"
+                onClick={() => emblaApi?.scrollTo(i)}
+                aria-label={`Ir para imagem ${i + 1}`}
+                aria-current={selectedIndex === i}
+                className="pointer-events-auto"
+              >
+                <span
+                  className={`block w-2 h-2 rounded-full ${
+                    i === selectedIndex ? "bg-primary" : "bg-white/50"
+                  }`}
+                />
+              </button>
             ))}
           </div>
         </div>
