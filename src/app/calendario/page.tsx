@@ -22,6 +22,98 @@ type CalendarEvent = {
   };
 };
 
+function isDateOnly(value: string) {
+  return /^\d{4}-\d{2}-\d{2}$/.test(value);
+}
+
+function toDateKeyFromDate(dateObj: Date) {
+  const year = dateObj.getFullYear();
+  const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+  const day = String(dateObj.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function normalizeEventText(text?: string) {
+  return (text ?? '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+}
+
+function isCultoAdministrativoTitle(title?: string) {
+  const normalized = normalizeEventText(title);
+  return normalized.includes('culto administrativo') || /\bculto\s+adm\b/.test(normalized);
+}
+
+function getEventYears(events: CalendarEvent[]) {
+  const years = new Set<number>();
+
+  events.forEach((event) => {
+    [event.date, event.start, event.end].forEach((value) => {
+      if (!value || !isDateOnly(value)) return;
+      years.add(Number(value.slice(0, 4)));
+    });
+  });
+
+  if (years.size === 0) {
+    years.add(new Date().getFullYear());
+  }
+
+  return Array.from(years).sort((a, b) => a - b);
+}
+
+function getCultoAdministrativoDates(events: CalendarEvent[]) {
+  const blockedDates = new Set<string>();
+
+  events.forEach((event) => {
+    if (!isCultoAdministrativoTitle(event.title)) return;
+
+    if (event.date && isDateOnly(event.date)) {
+      blockedDates.add(event.date);
+      return;
+    }
+
+    if (event.start && event.end && isDateOnly(event.start) && isDateOnly(event.end)) {
+      const start = new Date(`${event.start}T00:00:00`);
+      const end = new Date(`${event.end}T00:00:00`);
+
+      for (const day = new Date(start); day <= end; day.setDate(day.getDate() + 1)) {
+        blockedDates.add(toDateKeyFromDate(day));
+      }
+      return;
+    }
+
+    if (event.start && isDateOnly(event.start)) {
+      blockedDates.add(event.start);
+    }
+  });
+
+  return blockedDates;
+}
+
+function buildInstitutoBiblicoEvents(years: number[], blockedDates: Set<string>): CalendarEvent[] {
+  const instituteEvents: CalendarEvent[] = [];
+
+  years.forEach((year) => {
+    const firstSunday = new Date(year, 0, 1);
+    while (firstSunday.getDay() !== 0) {
+      firstSunday.setDate(firstSunday.getDate() + 1);
+    }
+
+    for (const day = new Date(firstSunday); day.getFullYear() === year; day.setDate(day.getDate() + 7)) {
+      const dateKey = toDateKeyFromDate(day);
+      if (blockedDates.has(dateKey)) continue;
+
+      instituteEvents.push({
+        title: 'Instituto Bíblico',
+        date: dateKey,
+      });
+    }
+  });
+
+  return instituteEvents;
+}
+
 const eventos = [
   // Fevereiro
   { title: 'Ceia do Senhor', date: '2026-02-01' },
@@ -99,13 +191,16 @@ const eventos = [
   { title: 'Culto da Virada', date: '2026-12-31' },
 ];
 
+const eventYears = getEventYears(eventos);
+const cultoAdministrativoDates = getCultoAdministrativoDates(eventos);
+const institutoBiblicoEvents = buildInstitutoBiblicoEvents(eventYears, cultoAdministrativoDates);
+
 const programacoesFixas = [
-  { daysOfWeek: [0], title: 'Instituto Bíblico', startTime: '09:00' },
   { daysOfWeek: [0], title: 'Culto', startTime: '18:00' },
   { daysOfWeek: [6], title: 'Oração Matutina', startTime: '06:00' },
 ];
 
-const allEvents: CalendarEvent[] = [...eventos, ...programacoesFixas].map(ev => ({
+const allEvents: CalendarEvent[] = [...eventos, ...institutoBiblicoEvents, ...programacoesFixas].map(ev => ({
   ...ev,
   color: getEventColor(ev)
 }));
