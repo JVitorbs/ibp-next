@@ -35,7 +35,6 @@ export default function Navigation() {
           <Link href="/instituto-biblico"><Button variant="ghost">Instituto Bíblico</Button></Link>
           <Link href="/pg"><Button variant="ghost">Pequenos Grupos</Button></Link>
           <Link href="/galeria"><Button variant="ghost">Galeria</Button></Link>
-          <Link href="/#contribua"><Button variant="ghost">Contribua</Button></Link>
           <Link href="/#contato"><Button variant="ghost">Contato</Button></Link>
           <Link href="/calendario"><Button variant="ghost">Calendário</Button></Link>
         </div>
@@ -57,7 +56,6 @@ export default function Navigation() {
                 <Link href="/instituto-biblico" onClick={handleMenuClick}><Button variant="ghost" className="w-full justify-start">Instituto Bíblico</Button></Link>
                 <Link href="/pg" onClick={handleMenuClick}><Button variant="ghost" className="w-full justify-start">Pequenos Grupos</Button></Link>
                 <Link href="/galeria" onClick={handleMenuClick}><Button variant="ghost" className="w-full justify-start">Galeria</Button></Link>
-                <Link href="/#contribua" onClick={handleMenuClick}><Button variant="ghost" className="w-full justify-start">Contribua</Button></Link>
                 <Link href="/#contato" onClick={handleMenuClick}><Button variant="ghost" className="w-full justify-start">Contato</Button></Link>
                 <Link href="/calendario" onClick={handleMenuClick}><Button variant="ghost" className="w-full justify-start">Calendário</Button></Link>
               </div>
