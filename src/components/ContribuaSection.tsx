@@ -48,16 +48,19 @@ export default function ContribuaSection() {
   };
 
   return (
-    <section id="contribua" className="py-16 md:py-24 px-4 bg-linear-to-b from-primary/10 via-background to-primary/5">
+    <section id="contribua" className="py-16 md:py-24 px-4 bg-primary/30">
       <div className="max-w-6xl mx-auto">
         <ScrollReveal direction="up">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">
               Dízimos, missões e reforma
             </h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Contribua com a obra, 
-            </p>
+            <blockquote className="mt-6 mx-auto max-w-3xl rounded-2xl border border-primary/15 bg-white/80 px-5 py-4 text-base md:text-lg text-foreground shadow-sm">
+              “Cada um contribua conforme determinou no coração, não com pesar nem por obrigação, pois Deus ama a quem dá com alegria.”
+              <footer className="mt-3 text-sm font-medium text-muted-foreground">
+                2 Coríntios 9:7 NVI
+              </footer>
+            </blockquote>
           </div>
         </ScrollReveal>
 
