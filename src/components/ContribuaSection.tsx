@@ -4,13 +4,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { Banknote, Building2, Check, Copy, Mail, QrCode } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Image from "next/image";
 
 type ContributionItem = {
   title: string;
   icon: React.ReactNode;
   copyValue: string;
   note: string;
+  qrKey?: string;
 };
 
 const contributions: ContributionItem[] = [
@@ -19,23 +21,50 @@ const contributions: ContributionItem[] = [
     icon: <Banknote className="h-6 w-6" />,
     copyValue: "41007436000190",
     note: "Use esta chave para ofertas e dízimos gerais da igreja.",
+    qrKey: "dizimos",
   },
   {
     title: "Missões",
     icon: <Mail className="h-6 w-6" />,
     copyValue: "missoesibprn@gmail.com",
     note: "Destino separado para contribuições missionárias.",
+    qrKey: "missoes",
   },
   {
     title: "Reforma",
     icon: <Building2 className="h-6 w-6" />,
     copyValue: "somosibp@gmail.com",
     note: "Contribuições voltadas para a reforma e manutenção da igreja.",
+    qrKey: "reforma",
   },
 ];
 
 export default function ContribuaSection() {
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  const [qrImages, setQrImages] = useState<Map<string, boolean>>(new Map());
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const checkQrImages = async () => {
+      const imageMap = new Map<string, boolean>();
+      
+      for (const item of contributions) {
+        if (!item.qrKey) continue;
+        
+        try {
+          const response = await fetch(`/images/qr_code_pix/${item.qrKey}.png`, { method: 'HEAD' });
+          imageMap.set(item.qrKey, response.ok);
+        } catch {
+          imageMap.set(item.qrKey, false);
+        }
+      }
+      
+      setQrImages(imageMap);
+      setIsLoading(false);
+    };
+
+    checkQrImages();
+  }, []);
 
   const handleCopy = async (value: string, title: string) => {
     try {
@@ -110,15 +139,17 @@ export default function ContribuaSection() {
                     </div>
                   </div>
 
-                  <div className="rounded-2xl border border-dashed border-primary/20 bg-background/80 p-4 text-center">
-                    <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                      <QrCode className="h-8 w-8" />
+                  {!isLoading && item.qrKey && qrImages.get(item.qrKey) ? (
+                    <div className="rounded-2xl border border-primary/20 bg-background/80 p-4 flex items-center justify-center">
+                      <Image
+                        src={`/images/qr_code_pix/${item.qrKey}.png`}
+                        alt={`QR Code - ${item.title}`}
+                        width={200}
+                        height={200}
+                        className="rounded-xl"
+                      />
                     </div>
-                    <p className="text-sm font-semibold text-foreground">QR code reservado</p>
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      Assim que a imagem chegar, ela entra aqui.
-                    </p>
-                  </div>
+                  ) : null}
                 </CardContent>
               </Card>
             </ScrollReveal>
