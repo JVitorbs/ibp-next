@@ -17,7 +17,7 @@ type ContributionItem = {
 
 const contributions: ContributionItem[] = [
   {
-    title: "Dízimos e Ofertas Gerais",
+    title: "Dízimos e Ofertas",
     icon: <Banknote className="h-6 w-6" />,
     copyValue: "41007436000190",
     note: "Use esta chave para ofertas e dízimos gerais da igreja.",
