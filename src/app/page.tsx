@@ -2,8 +2,8 @@ import HeroSection from "../components/HeroSection";
 import AboutSection from "../components/AboutSection";
 import MissionSection from "../components/MissionSection";
 import VideoSection from "../components/VideoSection";
+import ContribuaSection from "../components/ContribuaSection";
 import ContactSection from "@/components/ContactSection";
-import Footer from "../components/Footer";
 
 export default function Home() {
   return (
@@ -12,6 +12,7 @@ export default function Home() {
       <AboutSection />
       <MissionSection />
       <VideoSection />
+      <ContribuaSection />
       <ContactSection />
     </main>
   );
