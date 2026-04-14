@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { getEventColor } from './utils';
 
@@ -10,6 +10,25 @@ interface EventInfoModalProps {
 }
 
 const EventInfoModal: React.FC<EventInfoModalProps> = ({ open, onClose, selectedDate, selectedEvents }) => {
+  useEffect(() => {
+    if (!open) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [open]);
+
+  const formatSelectedDate = (date: string) => {
+    const [year, month, day] = date.split('-').map(Number);
+
+    if (!year || !month || !day) return date;
+
+    return new Date(year, month - 1, day).toLocaleDateString('pt-BR');
+  };
+
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -27,7 +46,7 @@ const EventInfoModal: React.FC<EventInfoModalProps> = ({ open, onClose, selected
         <div className="w-full mt-2 text-center font-bold text-lg">Programações do dia</div>
         <div className="text-center text-muted-foreground mb-2">
           {selectedDate && (
-            <span>{new Date(selectedDate).toLocaleDateString('pt-BR')}</span>
+            <span>{formatSelectedDate(selectedDate)}</span>
           )}
         </div>
         <div className="pt-2 w-full">
