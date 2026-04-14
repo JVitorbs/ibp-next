@@ -12,6 +12,26 @@
   background: var(--primary) !important;
   border-color: var(--primary) !important;
 }
+
+/* Highlight visual for selected day across calendars */
+.fc .ibp-selected-day {
+  background: color-mix(in srgb, var(--primary) 14%, transparent);
+}
+
+.fc .ibp-selected-day .fc-daygrid-day-number {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-radius: 9999px;
+  min-width: 1.75rem;
+  min-height: 1.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fc .ibp-selected-day.fc-day-today {
+  box-shadow: inset 0 0 0 2px var(--primary);
+}
 @import "tailwindcss";
 @import "tw-animate-css";
 

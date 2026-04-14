@@ -2,11 +2,25 @@
 import dayGridPlugin from '@fullcalendar/daygrid';
 import multiMonthPlugin from '@fullcalendar/multimonth';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
+import { EventClickArg } from '@fullcalendar/core';
 import { Card } from '@/components/ui/card';
 import EventInfoModal from './EventInfoModal';
 import { getEventColor } from './utils';
 import dynamic from "next/dynamic";
 import React, { useEffect, useState, ReactNode, useMemo } from 'react';
+
+type CalendarEvent = {
+  title: string;
+  color?: string;
+  date?: string;
+  start?: string;
+  end?: string;
+  daysOfWeek?: number[];
+  startTime?: string;
+  extendedProps?: {
+    horario?: string;
+  };
+};
 
 const eventos = [
   // Fevereiro
@@ -91,7 +105,7 @@ const programacoesFixas = [
   { daysOfWeek: [6], title: 'Oração Matutina', startTime: '06:00' },
 ];
 
-const allEvents = [...eventos, ...programacoesFixas].map(ev => ({
+const allEvents: CalendarEvent[] = [...eventos, ...programacoesFixas].map(ev => ({
   ...ev,
   color: getEventColor(ev)
 }));
@@ -136,66 +150,83 @@ const CalendarPage = () => {
 
   const [open, setOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [selectedEvents, setSelectedEvents] = useState<any[]>([]);
+  const [selectedEvents, setSelectedEvents] = useState<CalendarEvent[]>([]);
 
-  useEffect(() => {
-    if (open) {
-      // eslint-disable-next-line no-console
-      console.log('Modal aberto para', selectedDate, selectedEvents);
+  function isDateOnly(value: string) {
+    return /^\d{4}-\d{2}-\d{2}$/.test(value);
+  }
+
+  function dateKeyToLocalDate(dateKey: string) {
+    const [year, month, day] = dateKey.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  }
+
+  function toDateKey(value: string | Date) {
+    if (typeof value === 'string' && isDateOnly(value)) {
+      return value;
     }
-  }, [open, selectedDate, selectedEvents]);
 
-  // Função para pegar todos eventos do dia considerando todos os tipos
-  // Função para normalizar datas para 'YYYY-MM-DD'
-  function normalizeDate(d: string | Date) {
-    const dateObj = typeof d === 'string' ? new Date(d) : d;
-    return dateObj.toISOString().slice(0, 10);
+    const dateObj = typeof value === 'string' ? new Date(value) : value;
+    const year = dateObj.getFullYear();
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  function normalizedText(text?: string) {
+    return (text ?? '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
+  }
+
+  function applyEventConflictRule(events: CalendarEvent[]) {
+    const hasCultoAdministrativo = events.some((ev) =>
+      normalizedText(ev.title).includes('culto administrativo')
+    );
+
+    if (!hasCultoAdministrativo) return events;
+
+    return events.filter((ev) => !normalizedText(ev.title).includes('instituto biblico'));
   }
 
   function getEventsOfDay(date: string) {
-    const dayOfWeek = new Date(date).getDay();
-    const normDate = normalizeDate(date);
-    const result = memoAllEvents.filter(ev => {
+    const selected = dateKeyToLocalDate(date);
+    const dayOfWeek = selected.getDay();
+    const dateKey = toDateKey(selected);
+    const result = memoAllEvents.filter((ev) => {
       // Evento de um dia específico
-      if ('date' in ev && ev.date && normalizeDate(ev.date) === normDate) return true;
+      if (ev.date && toDateKey(ev.date) === dateKey) return true;
       // Evento de múltiplos dias
-      if ('start' in ev && 'end' in ev && ev.start && ev.end) {
-        const start = normalizeDate(ev.start);
-        const end = normalizeDate(ev.end);
-        if (normDate >= start && normDate <= end) return true;
+      if (ev.start && ev.end) {
+        const start = toDateKey(ev.start);
+        const end = toDateKey(ev.end);
+        if (dateKey >= start && dateKey <= end) return true;
       }
       // Evento recorrente por dia da semana
-      if ('daysOfWeek' in ev && Array.isArray(ev.daysOfWeek) && ev.daysOfWeek.includes(dayOfWeek)) return true;
+      if (Array.isArray(ev.daysOfWeek) && ev.daysOfWeek.includes(dayOfWeek)) return true;
       return false;
     });
-    // Log para depuração
-    if (typeof window !== 'undefined') {
-      // eslint-disable-next-line no-console
-      console.log('Eventos encontrados para', normDate, result);
-    }
-    return result;
+    return applyEventConflictRule(result);
   }
 
-  // Handler para clique em evento
-  function handleEventClick(info: any) {
-    const date = info.event.startStr;
+  function openDayEvents(dateInput: string | Date) {
+    const date = toDateKey(dateInput);
     const events = getEventsOfDay(date);
-    // eslint-disable-next-line no-console
-    console.log('Eventos encontrados para', date, events);
     setSelectedDate(date);
     setSelectedEvents(events);
     setOpen(true);
+  }
+
+  // Handler para clique em evento
+  function handleEventClick(info: EventClickArg) {
+    if (!info.event.start) return;
+    openDayEvents(info.event.start);
   }
 
   // Handler para clique em dia vazio
   function handleDateClick(info: DateClickArg) {
-    const date = info.dateStr;
-    const events = getEventsOfDay(date);
-    // eslint-disable-next-line no-console
-    console.log('Eventos encontrados para', date, events);
-    setSelectedDate(date);
-    setSelectedEvents(events);
-    setOpen(true);
+    openDayEvents(info.date);
   }
 
   return (
@@ -259,6 +290,11 @@ const CalendarPage = () => {
                   events={memoAllEvents}
                   eventClick={handleEventClick}
                   dateClick={handleDateClick}
+                  dayCellClassNames={(arg) => (
+                    selectedDate && toDateKey(arg.date) === selectedDate
+                      ? ['ibp-selected-day']
+                      : []
+                  )}
                 />
               </Card>
             </section>
@@ -318,6 +354,11 @@ const CalendarPage = () => {
                       dayMaxEventRows={3}
                       eventClick={handleEventClick}
                       dateClick={handleDateClick}
+                      dayCellClassNames={(arg) => (
+                        selectedDate && toDateKey(arg.date) === selectedDate
+                          ? ['ibp-selected-day']
+                          : []
+                      )}
                     />
                     <div className="text-center font-semibold mt-2">
                       {new Date(2026, i).toLocaleString('pt-BR', { month: 'long' }).toUpperCase()}
