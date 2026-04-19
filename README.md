@@ -1,101 +1,96 @@
 # IBP Next - Igreja Batista do Pirangi
 
+Site institucional da Igreja Batista do Pirangi, desenvolvido com Next.js e TypeScript.
+
+Site em produção: [https://somosibp.vercel.app/](https://somosibp.vercel.app/)
+
 ## Visão Geral
 
-Este projeto é o site institucional da Igreja Batista do Pirangi, desenvolvido com Next.js e React. O objetivo é apresentar informações sobre a igreja, sua história, missão, ministérios, pequenos grupos, Instituto Bíblico, contatos e programação, servindo como ponto de acolhimento, divulgação e comunicação para membros, visitantes e interessados.
-
-O endereço do nosso site é [https://somosibp.vercel.app/](https://somosibp.vercel.app/).
-
+O projeto apresenta informações institucionais da igreja e reúne conteúdos para membros, visitantes e comunidade local, com foco em acolhimento, comunicação e divulgação.
 
 ## Funcionalidades
 
-- **Página inicial**: Apresentação da igreja, missão, valores e convite à comunidade.
-- **História**: Linha do tempo interativa com marcos históricos e imagens.
-- **Pequenos Grupos**: Explicação, benefícios e como participar dos PGs.
-- **Instituto Bíblico**: Informações sobre a Escola Bíblica Dominical, horários e classes.
-- **Contato**: Endereço, e-mail, horários de culto e link para localização no Google Maps.
-- **Footer**: Links rápidos e informações institucionais.
+- Página inicial com apresentação da igreja
+- História com linha do tempo e imagens
+- Pequenos Grupos (PG)
+- Instituto Bíblico
+- Diretoria
+- Galeria de fotos
+- Calendário de eventos
+- Seção de contato com endereço e localização
 
-## Público-alvo
+## Como rodar localmente
 
-- Membros da igreja
-- Visitantes e interessados
-- Comunidade local
-
-## Como rodar o projeto
+Pré-requisito: Node.js instalado.
 
 ```bash
 npm install
 npm run dev
 ```
-Acesse [http://localhost:3000](http://localhost:3000) no navegador.
 
-## Estrutura de Pastas
-
-```
-ibp-next/
-├── public/
-│   └── images/           # Imagens institucionais e linha do tempo
-├── src/
-│   ├── app/              # Páginas (historia, pg, instituto-biblico, etc)
-│   ├── components/       # Componentes reutilizáveis (HeroSection, Footer, etc)
-│   ├── lib/              # Funções utilitárias
-│   └── styles/           # Estilos globais
-├── package.json          # Dependências e scripts
-├── tsconfig.json         # Configuração TypeScript
-├── tailwind.config.js    # Configuração Tailwind
-├── README.md             # Documentação
-```
-
-## Principais Componentes
-
-- `HeroSection`: Banner principal com imagem e chamada.
-- `AboutSection`: Sobre a igreja, valores e acolhimento.
-- `MissionSection`: Missão institucional.
-- `ScrollReveal`: Animação de entrada dos elementos ao rolar.
-- `ContactSection`: Informações de contato e botão para Google Maps.
-- `Footer`: Rodapé institucional.
+Abra [http://localhost:3000](http://localhost:3000).
 
 ## Scripts
 
-- `npm run dev`: Inicia o servidor de desenvolvimento.
-- `npm run build`: Gera a build de produção.
-- `npm run start`: Inicia o servidor em produção.
-- `npm run lint`: Verifica padrões de código.
+- `npm run dev`: inicia o servidor de desenvolvimento
+- `npm run build`: gera a build de produção
+- `npm run start`: inicia a aplicação em modo produção
+- `npm run lint`: executa validação de lint
 
-## Tecnologias Utilizadas
+## Estrutura do projeto
 
-- **Next.js** (React, SSR/SSG)
-- **TypeScript**
-- **TailwindCSS** (estilização)
-- **Lucide React** (ícones)
-- **Radix UI** (componentes acessíveis)
-- **ESLint** (padronização de código)
+```text
+ibp-next/
+├── public/
+│   ├── images/                 # Imagens institucionais e da linha do tempo
+│   └── logos_Ibp/              # Logos e variações
+├── src/
+│   ├── app/                    # Rotas e páginas (App Router)
+│   │   ├── calendario/
+│   │   ├── diretoria/
+│   │   ├── galeria/
+│   │   ├── historia/
+│   │   ├── instituto-biblico/
+│   │   └── pg/
+│   ├── components/             # Componentes reutilizáveis
+│   │   └── ui/                 # Componentes de base (botão, card, etc)
+│   └── lib/                    # Utilitários
+├── eslint.config.mjs
+├── next.config.ts
+├── postcss.config.mjs
+├── tsconfig.json
+└── README.md
+```
+
+## Tecnologias
+
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS 4
+- Radix UI
+- FullCalendar
+- ESLint
 
 ## Deploy
 
-Recomenda-se o deploy na Vercel para melhor performance e integração com Next.js.
+Deploy recomendado na Vercel.
 
 ## Contribuição
 
-Sugestões e melhorias são bem-vindas!
+Sugestões e melhorias são bem-vindas.
 
----
-
-## Diagrama de Fluxo
+## Fluxo de navegação (resumo)
 
 ```mermaid
 flowchart TD
-    A[Usuário acessa site] --> B[Home]
-    B --> C[Sobre]
-    B --> D[Missão]
-    B --> E[História]
-    B --> F[Pequenos Grupos]
-    B --> G[Instituto Bíblico]
-    B --> H[Contato]
-    H --> I[Google Maps]
-    E --> J[Linha do Tempo]
-    F --> K[Como Participar]
-    G --> L[Classes Disponíveis]
-    B --> M[Footer]
+    A[Usuario acessa o site] --> B[Home]
+    B --> C[Historia]
+    B --> D[Pequenos Grupos]
+    B --> E[Instituto Biblico]
+    B --> F[Diretoria]
+    B --> G[Galeria]
+    B --> H[Calendario]
+    B --> I[Contato]
+    I --> J[Google Maps]
 ```
