@@ -82,6 +82,16 @@ export default function Historia() {
     },
     {
       year: "2018",
+      title: "Encontro da Terceira idade em 2018",
+      description: "Registros do encontro da terceira idade realizado em 2018, reunindo os momentos marcantes desse evento.",
+      type: "milestone",
+      images: [
+        "/images/galeria/terceira_idade_2018.jpeg",
+        "/images/galeria/terceira_idade_2018-2.jpeg",
+      ],
+    },
+    {
+      year: "2018",
       title: "Fachada da Igreja em 2018",
       description: "Registro da fachada em 2018, marcando mais uma etapa da caminhada da comunidade ao longo dos anos.",
       type: "milestone",
@@ -107,6 +117,16 @@ export default function Historia() {
       description: "Comemorando quatro décadas de história, com uma comunidade vibrante e comprometida em fazer a diferença.",
       type: "milestone",
       image: "/images/historia/40anos-2023.png",
+    },
+    {
+      year: "2023",
+      title: "Feira Missionária 2023",
+      description: "Momento de feira missionária arrecadando recursos para a missão.",
+      type: "achievement",
+      images: [
+        "/images/galeria/feira_miss_2023.jpeg",
+        "/images/galeria/feira_miss_2023-2.jpeg"
+      ],
     },
     {
       year: "2023",
