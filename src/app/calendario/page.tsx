@@ -198,6 +198,7 @@ const institutoBiblicoEvents = buildInstitutoBiblicoEvents(eventYears, cultoAdmi
 const programacoesFixas = [
   { daysOfWeek: [0], title: 'Culto', startTime: '18:00' },
   { daysOfWeek: [6], title: 'Oração Matutina', startTime: '06:00' },
+  { daysOfWeek: [6], title: 'MM - Mulheres em Missão', startTime: '16:00' },
 ];
 
 const allEvents: CalendarEvent[] = [...eventos, ...institutoBiblicoEvents, ...programacoesFixas].map(ev => ({
@@ -404,6 +405,10 @@ const CalendarPage = () => {
               <div className="flex items-center gap-2">
                 <span className="inline-block w-4 h-4 rounded-full" style={{ background: 'var(--event-missoes)' }} />
                 <span className="text-sm">Missões</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="inline-block w-4 h-4 rounded-full" style={{ background: 'var(--event-mm)' }} />
+                <span className="text-sm">MM - Mulheres em Missão</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="inline-block w-4 h-4 rounded-full" style={{ background: 'var(--event-juventude)' }} />
