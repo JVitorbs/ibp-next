@@ -1,6 +1,9 @@
 # Imagens da Linha do Tempo
 
-Adicione aqui as fotos dos marcos históricos da igreja com os seguintes nomes:
+Este diretório armazena as imagens usadas na seção de história (linha do tempo) do site.
+
+## Nomes obrigatórios dos arquivos
+
 
 - `fundacao-1985.jpg` - Foto da fundação da igreja (1985)
 - `sede-1990.jpg` - Foto da primeira sede própria (1990)
