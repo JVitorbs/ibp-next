@@ -82,6 +82,7 @@ export default function ContactSection() {
                 <div className="border-b pb-4">
                   <p className="font-semibold text-lg">Sábado</p>
                   <p className="text-muted-foreground">6:00 - Oração Matutina</p>
+                  <p className="text-muted-foreground">16:00 - MM (Mulheres em Missão)</p>
                 </div>
                 <div className="border-b pb-4">
                   <p className="font-semibold text-lg">Domingo</p>
