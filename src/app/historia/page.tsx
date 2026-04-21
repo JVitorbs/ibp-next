@@ -61,6 +61,13 @@ export default function Historia() {
     },
     {
       year: "2014",
+      title: "Congregação Batista filha da IBP em 2014",
+      description: "Fotografia da congregação da igreja em 2014, avançando e expandindo o reino de Deus.",
+      type: "milestone",
+      image: "/images/galeria/cong_2014.png",
+    },
+    {
+      year: "2014",
       title: "Novo Templo",
       description: "Após a reforma, a igreja contou com um novo templo que melhorou a experiência dos membros.",
       type: "milestone",
@@ -99,10 +106,27 @@ export default function Historia() {
     },
     {
       year: "2019",
+      title: "Congregação Batista filha da IBP em 2019",
+      description: "Fotografia da congregação da igreja em 2019, avançando e expandindo o reino de Deus.",
+      type: "milestone",
+      image: "/images/galeria/cong_2019.jpeg",
+    },
+    {
+      year: "2019",
       title: "Fachada da Igreja em 2019",
       description: "Fotografia da frente da igreja em 2019, preservando a memória recente e a identidade visual do templo.",
       type: "milestone",
       image: "/images/historia/2019.png",
+    },
+    {
+      year: "2020",
+      title: "Campanha de Missões Mundiais 2020",
+      description: "Campanha missionária arrecadando recursos para a missão a nível mundial.",
+      type: "achievement",
+      images: [
+        "/images/galeria/missoes_mundiais_2020_1.jpeg",
+        "/images/galeria/missoes_mundiais_2020_2.jpeg"
+      ],
     },
     {
       year: "2020",
