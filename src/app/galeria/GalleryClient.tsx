@@ -8,9 +8,19 @@ import { ChevronLeft, ChevronRight, Download, X, ZoomIn, ZoomOut } from "lucide-
 const MIN_ZOOM = 1;
 const DESKTOP_ZOOM = 2;
 const MAX_ZOOM = 3;
+const PAN_LIMIT_BASE = 180;
+const MAIN_EMBLA_OPTIONS = {
+  loop: true,
+  align: "center",
+} as const;
 
 function clampZoom(value: number) {
   return Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, value));
+}
+
+function clampPan(value: number, zoomScale: number) {
+  const limit = Math.max(0, (zoomScale - 1) * PAN_LIMIT_BASE);
+  return Math.max(-limit, Math.min(limit, value));
 }
 
 function getTouchDistance(firstTouch: React.Touch, secondTouch: React.Touch) {
@@ -22,13 +32,13 @@ export default function GalleryClient({ images }: { images: string[] }) {
   const [startIndex, setStartIndex] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [zoomScale, setZoomScale] = useState(1);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [isPanning, setIsPanning] = useState(false);
   const [showPinchHint, setShowPinchHint] = useState(false);
   const pinchRef = useRef<{ distance: number; scale: number } | null>(null);
+  const panDragRef = useRef<{ startX: number; startY: number; originX: number; originY: number } | null>(null);
 
-  const [mainEmblaRef, mainEmblaApi] = useEmblaCarousel({
-    loop: true,
-    align: "center",
-  });
+  const [mainEmblaRef, mainEmblaApi] = useEmblaCarousel(MAIN_EMBLA_OPTIONS);
   const [thumbEmblaRef, thumbEmblaApi] = useEmblaCarousel({
     containScroll: "keepSnaps",
     dragFree: true,
@@ -42,23 +52,27 @@ export default function GalleryClient({ images }: { images: string[] }) {
   }, []);
 
   const scrollPrev = useCallback(() => {
-    if (isZoomed) return;
     mainEmblaApi?.scrollPrev();
-  }, [isZoomed, mainEmblaApi]);
+  }, [mainEmblaApi]);
 
   const scrollNext = useCallback(() => {
-    if (isZoomed) return;
     mainEmblaApi?.scrollNext();
-  }, [isZoomed, mainEmblaApi]);
+  }, [mainEmblaApi]);
 
   const resetZoom = useCallback(() => {
     pinchRef.current = null;
+    panDragRef.current = null;
+    setIsPanning(false);
     setZoomScale(1);
+    setPan({ x: 0, y: 0 });
   }, []);
 
   const toggleZoom = useCallback(() => {
     setZoomScale((currentScale) => (currentScale > 1 ? 1 : DESKTOP_ZOOM));
     pinchRef.current = null;
+    panDragRef.current = null;
+    setIsPanning(false);
+    setPan({ x: 0, y: 0 });
   }, []);
 
   const handleDownload = useCallback(() => {
@@ -77,6 +91,7 @@ export default function GalleryClient({ images }: { images: string[] }) {
   const handleImageTouchStart = useCallback(
     (event: React.TouchEvent<HTMLDivElement>) => {
       if (event.touches.length === 2) {
+        panDragRef.current = null;
         pinchRef.current = {
           distance: getTouchDistance(event.touches[0], event.touches[1]),
           scale: zoomScale,
@@ -86,10 +101,17 @@ export default function GalleryClient({ images }: { images: string[] }) {
       }
 
       if (isZoomed) {
+        const touch = event.touches[0];
+        panDragRef.current = {
+          startX: touch.clientX,
+          startY: touch.clientY,
+          originX: pan.x,
+          originY: pan.y,
+        };
         event.stopPropagation();
       }
     },
-    [isZoomed, zoomScale],
+    [isZoomed, pan.x, pan.y, zoomScale],
   );
 
   const handleImageTouchMove = useCallback(
@@ -104,18 +126,74 @@ export default function GalleryClient({ images }: { images: string[] }) {
         return;
       }
 
+      if (isZoomed && panDragRef.current && event.touches.length === 1) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const touch = event.touches[0];
+        const nextX = clampPan(panDragRef.current.originX + (touch.clientX - panDragRef.current.startX), zoomScale);
+        const nextY = clampPan(panDragRef.current.originY + (touch.clientY - panDragRef.current.startY), zoomScale);
+        setPan({ x: nextX, y: nextY });
+        return;
+      }
+
       if (isZoomed) {
         event.stopPropagation();
       }
     },
-    [isZoomed],
+    [isZoomed, zoomScale],
   );
 
   const handleImageTouchEnd = useCallback((event: React.TouchEvent<HTMLDivElement>) => {
     if (event.touches.length < 2) {
       pinchRef.current = null;
     }
+
+    if (event.touches.length === 0) {
+      panDragRef.current = null;
+    }
   }, []);
+
+  const handleImagePointerDown = useCallback(
+    (event: React.PointerEvent<HTMLDivElement>) => {
+      if (!isZoomed || event.pointerType !== "mouse") return;
+
+      event.preventDefault();
+      panDragRef.current = {
+        startX: event.clientX,
+        startY: event.clientY,
+        originX: pan.x,
+        originY: pan.y,
+      };
+      setIsPanning(true);
+      event.currentTarget.setPointerCapture(event.pointerId);
+      event.stopPropagation();
+    },
+    [isZoomed, pan.x, pan.y],
+  );
+
+  const handleImagePointerMove = useCallback(
+    (event: React.PointerEvent<HTMLDivElement>) => {
+      if (!isZoomed || event.pointerType !== "mouse" || !panDragRef.current) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      const nextX = clampPan(panDragRef.current.originX + (event.clientX - panDragRef.current.startX), zoomScale);
+      const nextY = clampPan(panDragRef.current.originY + (event.clientY - panDragRef.current.startY), zoomScale);
+      setPan({ x: nextX, y: nextY });
+    },
+    [isZoomed, zoomScale],
+  );
+
+  const handleImagePointerUp = useCallback(
+    (event: React.PointerEvent<HTMLDivElement>) => {
+      if (event.pointerType !== "mouse") return;
+      panDragRef.current = null;
+      setIsPanning(false);
+    },
+    [],
+  );
 
   const onSelect = useCallback(() => {
     if (!mainEmblaApi) return;
@@ -134,6 +212,11 @@ export default function GalleryClient({ images }: { images: string[] }) {
       mainEmblaApi.off("reInit", onSelect);
     };
   }, [mainEmblaApi, onSelect]);
+
+  useEffect(() => {
+    if (!mainEmblaApi) return;
+    mainEmblaApi.reInit({ ...MAIN_EMBLA_OPTIONS, watchDrag: !isZoomed });
+  }, [isZoomed, mainEmblaApi]);
 
   useEffect(() => {
     if (!isOpen || !mainEmblaApi) return;
@@ -171,10 +254,6 @@ export default function GalleryClient({ images }: { images: string[] }) {
   }
 
   function handleModalKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
-    if (isZoomed) {
-      return;
-    }
-
     if (event.key === "ArrowLeft") {
       event.preventDefault();
       scrollPrev();
@@ -253,8 +332,7 @@ export default function GalleryClient({ images }: { images: string[] }) {
               <div className="relative">
                 <button
                   type="button"
-                  disabled={isZoomed}
-                  className="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/45 p-2 text-white transition hover:bg-black/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 disabled:cursor-not-allowed disabled:opacity-40 md:left-4"
+                  className="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/45 p-2 text-white transition hover:bg-black/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 md:left-4"
                   onClick={scrollPrev}
                   aria-label="Foto anterior"
                 >
@@ -262,16 +340,21 @@ export default function GalleryClient({ images }: { images: string[] }) {
                 </button>
 
                 <div className="overflow-hidden rounded-xl" ref={mainEmblaRef}>
-                  <div className="flex touch-pan-y">
+                  <div className={isZoomed ? "flex touch-none" : "flex touch-pan-y"}>
                     {images.map((img, index) => (
                       <div key={img} className="relative min-w-0 shrink-0 grow-0 basis-full px-1">
                         <div className="relative h-[66vh] overflow-hidden rounded-xl bg-transparent md:h-[72vh]">
                           <div
-                            className="absolute inset-0 transition-transform duration-200 ease-out"
+                            className={`absolute inset-0 ${index === selectedIndex && isZoomed ? "" : "transition-transform duration-200 ease-out"}`}
                             style={{
-                              transform: `scale(${index === selectedIndex ? zoomScale : 1})`,
+                              transform: `translate3d(${index === selectedIndex ? pan.x : 0}px, ${index === selectedIndex ? pan.y : 0}px, 0) scale(${index === selectedIndex ? zoomScale : 1})`,
                               transformOrigin: "center center",
+                              touchAction: index === selectedIndex && isZoomed ? "none" : "pan-y",
                             }}
+                            onPointerDown={index === selectedIndex ? handleImagePointerDown : undefined}
+                            onPointerMove={index === selectedIndex ? handleImagePointerMove : undefined}
+                            onPointerUp={index === selectedIndex ? handleImagePointerUp : undefined}
+                            onPointerCancel={index === selectedIndex ? handleImagePointerUp : undefined}
                             onTouchStart={index === selectedIndex ? handleImageTouchStart : undefined}
                             onTouchMove={index === selectedIndex ? handleImageTouchMove : undefined}
                             onTouchEnd={index === selectedIndex ? handleImageTouchEnd : undefined}
@@ -284,7 +367,8 @@ export default function GalleryClient({ images }: { images: string[] }) {
                                 fill
                                 priority={Math.abs(index - selectedIndex) <= 1}
                                 sizes="100vw"
-                                className={`object-contain ${index === selectedIndex && isZoomed ? "cursor-zoom-out" : "cursor-zoom-in"}`}
+                                draggable={false}
+                                className={`select-none object-contain ${index === selectedIndex && isZoomed ? (isPanning ? "cursor-grabbing" : "cursor-grab") : "cursor-zoom-in"}`}
                               />
                             </div>
                           </div>
@@ -302,8 +386,7 @@ export default function GalleryClient({ images }: { images: string[] }) {
 
                 <button
                   type="button"
-                  disabled={isZoomed}
-                  className="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/45 p-2 text-white transition hover:bg-black/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 disabled:cursor-not-allowed disabled:opacity-40 md:right-4"
+                  className="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/45 p-2 text-white transition hover:bg-black/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 md:right-4"
                   onClick={scrollNext}
                   aria-label="Próxima foto"
                 >
@@ -317,6 +400,7 @@ export default function GalleryClient({ images }: { images: string[] }) {
                     <button
                       key={`${img}-thumb`}
                       type="button"
+                      disabled={isZoomed}
                       onClick={() => mainEmblaApi?.scrollTo(index)}
                       aria-label={`Ir para foto ${index + 1}`}
                       aria-current={selectedIndex === index}
@@ -324,7 +408,7 @@ export default function GalleryClient({ images }: { images: string[] }) {
                         selectedIndex === index
                           ? "border-white ring-2 ring-white/80"
                           : "border-white/30 opacity-70 hover:opacity-100"
-                      }`}
+                      } ${isZoomed ? "cursor-not-allowed opacity-40" : ""}`}
                     >
                       <Image
                         src={`/images/galeria/${img}`}
