@@ -4,28 +4,12 @@ import Image from "next/image";
 import * as Dialog from "@radix-ui/react-dialog";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight, Download, X, ZoomIn, ZoomOut } from "lucide-react";
+import { clampZoom, clampPan, getTouchDistance, MIN_ZOOM, DESKTOP_ZOOM, MAX_ZOOM, PAN_LIMIT_BASE } from "./utils";
 
-const MIN_ZOOM = 1;
-const DESKTOP_ZOOM = 2;
-const MAX_ZOOM = 3;
-const PAN_LIMIT_BASE = 180;
 const MAIN_EMBLA_OPTIONS = {
   loop: true,
   align: "center",
 } as const;
-
-function clampZoom(value: number) {
-  return Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, value));
-}
-
-function clampPan(value: number, zoomScale: number) {
-  const limit = Math.max(0, (zoomScale - 1) * PAN_LIMIT_BASE);
-  return Math.max(-limit, Math.min(limit, value));
-}
-
-function getTouchDistance(firstTouch: React.Touch, secondTouch: React.Touch) {
-  return Math.hypot(secondTouch.clientX - firstTouch.clientX, secondTouch.clientY - firstTouch.clientY);
-}
 
 export default function GalleryClient({ images }: { images: string[] }) {
   const [isOpen, setIsOpen] = useState(false);

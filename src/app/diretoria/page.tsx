@@ -2,6 +2,7 @@ import Footer from "@/components/Footer";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { readdir } from "node:fs/promises";
 import path from "node:path";
+import { getInitials, getLinhaHorizontalWidth, getMemberKey } from "./utils";
 
 interface Diretor {
   role: string;
@@ -134,14 +135,6 @@ const diretoria: Diretor[] = [
   },
 ];
 
-const getInitials = (name: string) => {
-  const parts = name.trim().split(" ").filter(Boolean);
-  if (!parts.length) return "";
-  const first = parts[0][0] ?? "";
-  const last = parts.length > 1 ? parts[parts.length - 1][0] : "";
-  return (first + last).toUpperCase();
-};
-
 export default async function DiretoriaPage() {
   const diretoriaPath = path.join(process.cwd(), "public", "images", "diretoria");
   const arquivosDiretoria = await readdir(diretoriaPath);
@@ -166,13 +159,6 @@ export default async function DiretoriaPage() {
   const hasVicepresidentes = vicepresidentes.length > 0;
   const hasAdministrativo = administrativo.length > 0;
   const hasMinisterios = ministerios.length > 0;
-
-  const getLinhaHorizontalWidth = (count: number, min: number, max: number, step: number) => {
-    const width = min + Math.max(0, count - 1) * step;
-    return `${Math.min(max, width)}px`;
-  };
-
-  const getMemberKey = (pessoa: Diretor) => `${pessoa.role}-${pessoa.name}`;
 
   const CardMember = ({ pessoa }: { pessoa: Diretor }) => (
     <div className="flex flex-col items-center px-2 py-2 md:px-4 md:py-4">
