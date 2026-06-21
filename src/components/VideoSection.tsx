@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { getYoutubeVideoId } from "./VideoUtils";
 import { ChevronLeft, ChevronRight, ExternalLink, PlayCircle } from "lucide-react";
 import { ScrollReveal } from "./ScrollReveal";
 
@@ -56,32 +57,6 @@ const videos: VideoInput[] = [
     description: "Musical de Páscoa - A jornada da Redenção - em 2024.",
   },
 ];
-
-function getYoutubeVideoId(url: string): string | null {
-  try {
-    const parsed = new URL(url);
-
-    if (parsed.hostname.includes("youtu.be")) {
-      const id = parsed.pathname.replace("/", "").trim();
-      return id || null;
-    }
-
-    if (parsed.hostname.includes("youtube.com")) {
-      const queryId = parsed.searchParams.get("v");
-      if (queryId) return queryId;
-
-      const shortsMatch = parsed.pathname.match(/\/shorts\/([^/]+)/);
-      if (shortsMatch?.[1]) return shortsMatch[1];
-
-      const embedMatch = parsed.pathname.match(/\/embed\/([^/]+)/);
-      if (embedMatch?.[1]) return embedMatch[1];
-    }
-  } catch {
-    return null;
-  }
-
-  return null;
-}
 
 export default function VideoSection() {
   const sectionRef = useRef<HTMLElement>(null);

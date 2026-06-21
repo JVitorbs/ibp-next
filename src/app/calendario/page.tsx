@@ -5,114 +5,9 @@ import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import { EventClickArg } from '@fullcalendar/core';
 import { Card } from '@/components/ui/card';
 import EventInfoModal from './EventInfoModal';
-import { getEventColor } from './utils';
+import { getEventColor, isDateOnly, toDateKeyFromDate, normalizeEventText, isCultoAdministrativoTitle, getEventYears, getCultoAdministrativoDates, buildInstitutoBiblicoEvents, dateKeyToLocalDate, toDateKey, normalizedText, applyEventConflictRule, formatSelectedDate, type CalendarEvent } from './utils';
 import dynamic from "next/dynamic";
 import React, { useEffect, useState, ReactNode, useMemo } from 'react';
-
-type CalendarEvent = {
-  title: string;
-  color?: string;
-  date?: string;
-  start?: string;
-  end?: string;
-  daysOfWeek?: number[];
-  startTime?: string;
-  extendedProps?: {
-    horario?: string;
-  };
-};
-
-function isDateOnly(value: string) {
-  return /^\d{4}-\d{2}-\d{2}$/.test(value);
-}
-
-function toDateKeyFromDate(dateObj: Date) {
-  const year = dateObj.getFullYear();
-  const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-  const day = String(dateObj.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
-
-function normalizeEventText(text?: string) {
-  return (text ?? '')
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase();
-}
-
-function isCultoAdministrativoTitle(title?: string) {
-  const normalized = normalizeEventText(title);
-  return normalized.includes('culto administrativo') || /\bculto\s+adm\b/.test(normalized);
-}
-
-function getEventYears(events: CalendarEvent[]) {
-  const years = new Set<number>();
-
-  events.forEach((event) => {
-    [event.date, event.start, event.end].forEach((value) => {
-      if (!value || !isDateOnly(value)) return;
-      years.add(Number(value.slice(0, 4)));
-    });
-  });
-
-  if (years.size === 0) {
-    years.add(new Date().getFullYear());
-  }
-
-  return Array.from(years).sort((a, b) => a - b);
-}
-
-function getCultoAdministrativoDates(events: CalendarEvent[]) {
-  const blockedDates = new Set<string>();
-
-  events.forEach((event) => {
-    if (!isCultoAdministrativoTitle(event.title)) return;
-
-    if (event.date && isDateOnly(event.date)) {
-      blockedDates.add(event.date);
-      return;
-    }
-
-    if (event.start && event.end && isDateOnly(event.start) && isDateOnly(event.end)) {
-      const start = new Date(`${event.start}T00:00:00`);
-      const end = new Date(`${event.end}T00:00:00`);
-
-      for (const day = new Date(start); day <= end; day.setDate(day.getDate() + 1)) {
-        blockedDates.add(toDateKeyFromDate(day));
-      }
-      return;
-    }
-
-    if (event.start && isDateOnly(event.start)) {
-      blockedDates.add(event.start);
-    }
-  });
-
-  return blockedDates;
-}
-
-function buildInstitutoBiblicoEvents(years: number[], blockedDates: Set<string>): CalendarEvent[] {
-  const instituteEvents: CalendarEvent[] = [];
-
-  years.forEach((year) => {
-    const firstSunday = new Date(year, 0, 1);
-    while (firstSunday.getDay() !== 0) {
-      firstSunday.setDate(firstSunday.getDate() + 1);
-    }
-
-    for (const day = new Date(firstSunday); day.getFullYear() === year; day.setDate(day.getDate() + 7)) {
-      const dateKey = toDateKeyFromDate(day);
-      if (blockedDates.has(dateKey)) continue;
-
-      instituteEvents.push({
-        title: 'Instituto Bíblico',
-        date: dateKey,
-      });
-    }
-  });
-
-  return instituteEvents;
-}
 
 const eventos = [
   // Fevereiro
@@ -247,44 +142,6 @@ const CalendarPage = () => {
   const [open, setOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedEvents, setSelectedEvents] = useState<CalendarEvent[]>([]);
-
-  function isDateOnly(value: string) {
-    return /^\d{4}-\d{2}-\d{2}$/.test(value);
-  }
-
-  function dateKeyToLocalDate(dateKey: string) {
-    const [year, month, day] = dateKey.split('-').map(Number);
-    return new Date(year, month - 1, day);
-  }
-
-  function toDateKey(value: string | Date) {
-    if (typeof value === 'string' && isDateOnly(value)) {
-      return value;
-    }
-
-    const dateObj = typeof value === 'string' ? new Date(value) : value;
-    const year = dateObj.getFullYear();
-    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-    const day = String(dateObj.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
-
-  function normalizedText(text?: string) {
-    return (text ?? '')
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .toLowerCase();
-  }
-
-  function applyEventConflictRule(events: CalendarEvent[]) {
-    const hasCultoAdministrativo = events.some((ev) =>
-      normalizedText(ev.title).includes('culto administrativo')
-    );
-
-    if (!hasCultoAdministrativo) return events;
-
-    return events.filter((ev) => !normalizedText(ev.title).includes('instituto biblico'));
-  }
 
   function getEventsOfDay(date: string) {
     const selected = dateKeyToLocalDate(date);

@@ -3,6 +3,7 @@
 import Footer from "../../components/Footer";
 import { ScrollReveal } from "../../components/ScrollReveal";
 import { Carousel } from "./_components/Carousel";
+import { getEventColor, getEventIcon } from "./utils";
 
 interface TimelineEvent {
   year: string;
@@ -203,36 +204,6 @@ export default function Historia() {
       ],
     },
   ];
-
-  const getEventColor = (type: string) => {
-    switch (type) {
-      case "foundation":
-        return "from-blue-500 to-blue-600";
-      case "milestone":
-        return "from-purple-500 to-purple-600";
-      case "reform":
-        return "from-green-500 to-green-600";
-      case "achievement":
-        return "from-orange-500 to-orange-600";
-      default:
-        return "from-gray-500 to-gray-600";
-    }
-  };
-
-  const getEventIcon = (type: string) => {
-    switch (type) {
-      case "foundation":
-        return "🏛️";
-      case "milestone":
-        return "⭐";
-      case "reform":
-        return "🔨";
-      case "achievement":
-        return "🎯";
-      default:
-        return "📅";
-    }
-  };
 
   return (
     <>
