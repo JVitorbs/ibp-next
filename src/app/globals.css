@@ -120,14 +120,14 @@
   --input: #e5e5e5;
   --ring: #445c40;
     --event-ceia: #445c40;
-    --event-missoes: #184a61;
-    --event-mm: #9a50d9;
-    --event-juventude: #ef6b19;
-    --event-casais: #baa28a;
-    --event-culto-adm: #666666;
-    --event-geral: #4ed0f2;
-    --event-fixo: #6eaa6f;
-    --event-comemorativo: #ffd700;
+    --event-missoes: #18566f;
+    --event-mm: #813eb5;
+    --event-juventude: #b3480c;
+    --event-casais: #705942;
+    --event-culto-adm: #4b4b4b;
+    --event-geral: #16758a;
+    --event-fixo: #3f7d46;
+    --event-comemorativo: #7a6500;
   --chart-2: #6eaa6f;
   --chart-3: #184a61;
   --chart-4: #ef6b19;
@@ -189,6 +189,17 @@
   }
   body {
     @apply bg-background text-foreground overflow-x-hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }
 

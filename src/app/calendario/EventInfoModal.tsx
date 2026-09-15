@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import * as Dialog from '@radix-ui/react-dialog';
 import { Card } from '@/components/ui/card';
 import { getEventColor } from './utils';
 
@@ -29,21 +30,28 @@ const EventInfoModal: React.FC<EventInfoModalProps> = ({ open, onClose, selected
     return new Date(year, month - 1, day).toLocaleDateString('pt-BR');
   };
 
-  if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* Backdrop com blur */}
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
-      <Card className="relative w-full max-w-md px-6 py-4 rounded-2xl shadow-2xl bg-background flex flex-col items-center z-10">
-        {/* Botão de fechar dentro do Card */}
-        <button
-          className="absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none"
+    <Dialog.Root open={open} onOpenChange={(nextOpen) => !nextOpen && onClose()}>
+      <Dialog.Portal>
+        <Dialog.Overlay
+          data-testid="calendar-modal-overlay"
+          className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
           onClick={onClose}
-          aria-label="Fechar"
-        >
-          <span aria-hidden="true">×</span>
-        </button>
-        <div className="w-full mt-2 text-center font-bold text-lg">Programações do dia</div>
+        />
+        <Dialog.Content className="fixed inset-0 z-50 flex items-center justify-center p-4 outline-none">
+          <Card className="relative w-full max-w-md px-6 py-4 rounded-2xl shadow-2xl bg-background flex flex-col items-center">
+            <Dialog.Close
+              className="absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none"
+              aria-label="Fechar"
+            >
+              <span aria-hidden="true">×</span>
+            </Dialog.Close>
+            <Dialog.Title className="w-full mt-2 text-center font-bold text-lg">
+              Programações do dia
+            </Dialog.Title>
+            <Dialog.Description className="sr-only">
+              Lista de programações da igreja na data selecionada.
+            </Dialog.Description>
         <div className="text-center text-muted-foreground mb-2">
           {selectedDate && (
             <span>{formatSelectedDate(selectedDate)}</span>
@@ -76,8 +84,10 @@ const EventInfoModal: React.FC<EventInfoModalProps> = ({ open, onClose, selected
             <div className="text-muted-foreground">Nenhuma programação para este dia.</div>
           )}
         </div>
-      </Card>
-    </div>
+          </Card>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 };
 

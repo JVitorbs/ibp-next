@@ -15,6 +15,18 @@ export function ScrollReveal({
 }: ScrollRevealProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
+
+  useEffect(() => {
+    if (typeof window.matchMedia !== "function") return;
+
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const updateMotionPreference = () => setReduceMotion(mediaQuery.matches);
+
+    updateMotionPreference();
+    mediaQuery.addEventListener("change", updateMotionPreference);
+    return () => mediaQuery.removeEventListener("change", updateMotionPreference);
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -42,7 +54,7 @@ export function ScrollReveal({
   }, []);
 
   const getTransformClass = () => {
-    if (isVisible) return "";
+    if (isVisible || reduceMotion) return "";
 
     switch (direction) {
       case "left":
@@ -61,8 +73,8 @@ export function ScrollReveal({
   return (
     <div
       ref={ref}
-      className={`${getTransformClass()} ${isVisible ? "opacity-100" : "opacity-0"} duration-700 transition-all`}
-      style={{ transitionDelay: isVisible ? `${delay}ms` : "0ms" }}
+      className={`${getTransformClass()} ${isVisible || reduceMotion ? "opacity-100" : "opacity-0"} duration-700 transition-all`}
+      style={{ transitionDelay: isVisible && !reduceMotion ? `${delay}ms` : "0ms" }}
     >
       {children}
     </div>

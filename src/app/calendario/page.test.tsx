@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 
 vi.mock('next/dynamic', () => ({
   default: () => {
@@ -27,6 +27,7 @@ describe('CalendarioPage', () => {
     const CalendarioPage = (await import('./page')).default;
     render(<CalendarioPage />);
     expect(screen.getByText('Calendário - Mês Atual')).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'Ver panorama anual' }));
     expect(screen.getByText('Panorama Geral dos Meses')).toBeTruthy();
   });
 

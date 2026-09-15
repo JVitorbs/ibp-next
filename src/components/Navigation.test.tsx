@@ -44,7 +44,7 @@ describe('Navigation', () => {
   it('renders mobile menu trigger button', () => {
     render(<Navigation />);
     // SheetTrigger renders a button with the hamburger icon inside nav
-    const mobileNav = screen.getByText('História').closest('.md\:flex');
+    const mobileNav = screen.getByText('História').closest('.lg\:flex');
     // Desktop nav should be visible; mobile trigger should exist
     const buttons = document.querySelectorAll('button');
     expect(buttons.length).toBeGreaterThan(0);
