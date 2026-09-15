@@ -31,6 +31,7 @@ export default function HeroSection() {
 
       {/* Conteúdo */}
       <div className="relative z-10 text-center text-white px-4 max-w-4xl">
+        <h1 className="sr-only">Igreja Batista do Pirangi</h1>
         <Image
           src="/logos_Ibp/logo_lado_w.png"
           alt="Logo Igreja Batista do Pirangi"

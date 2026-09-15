@@ -12,6 +12,17 @@ export default function Navigation() {
   const [isClient, setIsClient] = useState(false);
   useEffect(() => { setIsClient(true); }, []);
   const handleMenuClick = () => setOpen(false);
+  const handleContactClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    setOpen(false);
+
+    if (window.location.pathname !== "/") return;
+
+    event.preventDefault();
+    window.history.pushState(null, "", "/#contato");
+    requestAnimationFrame(() => {
+      document.getElementById("contato")?.scrollIntoView({ behavior: "smooth" });
+    });
+  };
   return (
     <nav className="sticky top-0 z-50 bg-background border-b border-foreground/10 shadow-sm">
       <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
@@ -27,23 +38,23 @@ export default function Navigation() {
         </Link>
 
         {/* Menu Desktop */}
-        <div className="hidden md:flex gap-1">
+        <div className="hidden lg:flex gap-1">
           {/*<Link href="/#sobre"><Button variant="ghost">Sobre</Button></Link>*/}
           {/*<Link href="/#missao"><Button variant="ghost">Missão</Button></Link>*/}
-          <Link href="/historia"><Button variant="ghost">História</Button></Link>
-          <Link href="/diretoria"><Button variant="ghost">Diretoria</Button></Link>
-          <Link href="/instituto-biblico"><Button variant="ghost">Instituto Bíblico</Button></Link>
-          <Link href="/pg"><Button variant="ghost">Pequenos Grupos</Button></Link>
-          <Link href="/galeria"><Button variant="ghost">Galeria</Button></Link>
-          <Link href="/#contato"><Button variant="ghost">Contato</Button></Link>
-          <Link href="/calendario"><Button variant="ghost">Calendário</Button></Link>
+          <Button variant="ghost" asChild><Link href="/historia">História</Link></Button>
+          <Button variant="ghost" asChild><Link href="/diretoria">Diretoria</Link></Button>
+          <Button variant="ghost" asChild><Link href="/instituto-biblico">Instituto Bíblico</Link></Button>
+          <Button variant="ghost" asChild><Link href="/pg">Pequenos Grupos</Link></Button>
+          <Button variant="ghost" asChild><Link href="/galeria">Galeria</Link></Button>
+          <Button variant="ghost" asChild><Link href="/#contato" onClick={handleContactClick}>Contato</Link></Button>
+          <Button variant="ghost" asChild><Link href="/calendario">Calendário</Link></Button>
         </div>
 
         {/* Menu Mobile */}
         {isClient && (
           <Sheet open={open} onOpenChange={setOpen}>
-            <SheetTrigger asChild className="md:hidden">
-              <Button variant="ghost" size="icon">
+            <SheetTrigger asChild className="lg:hidden">
+              <Button variant="ghost" size="icon" aria-label="Abrir menu de navegação">
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
@@ -51,13 +62,13 @@ export default function Navigation() {
               <div className="flex flex-col gap-4 mt-8">
                 {/*<Link href="/#sobre"><Button variant="ghost" className="w-full justify-start">Sobre</Button></Link>*/}
                 {/*<Link href="/#missao"><Button variant="ghost" className="w-full justify-start">Missão</Button></Link>*/}
-                <Link href="/historia" onClick={handleMenuClick}><Button variant="ghost" className="w-full justify-start">História</Button></Link>
-                <Link href="/diretoria" onClick={handleMenuClick}><Button variant="ghost" className="w-full justify-start">Diretoria</Button></Link>
-                <Link href="/instituto-biblico" onClick={handleMenuClick}><Button variant="ghost" className="w-full justify-start">Instituto Bíblico</Button></Link>
-                <Link href="/pg" onClick={handleMenuClick}><Button variant="ghost" className="w-full justify-start">Pequenos Grupos</Button></Link>
-                <Link href="/galeria" onClick={handleMenuClick}><Button variant="ghost" className="w-full justify-start">Galeria</Button></Link>
-                <Link href="/#contato" onClick={handleMenuClick}><Button variant="ghost" className="w-full justify-start">Contato</Button></Link>
-                <Link href="/calendario" onClick={handleMenuClick}><Button variant="ghost" className="w-full justify-start">Calendário</Button></Link>
+                <Button variant="ghost" className="w-full justify-start" asChild><Link href="/historia" onClick={handleMenuClick}>História</Link></Button>
+                <Button variant="ghost" className="w-full justify-start" asChild><Link href="/diretoria" onClick={handleMenuClick}>Diretoria</Link></Button>
+                <Button variant="ghost" className="w-full justify-start" asChild><Link href="/instituto-biblico" onClick={handleMenuClick}>Instituto Bíblico</Link></Button>
+                <Button variant="ghost" className="w-full justify-start" asChild><Link href="/pg" onClick={handleMenuClick}>Pequenos Grupos</Link></Button>
+                <Button variant="ghost" className="w-full justify-start" asChild><Link href="/galeria" onClick={handleMenuClick}>Galeria</Link></Button>
+                <Button variant="ghost" className="w-full justify-start" asChild><Link href="/#contato" onClick={handleContactClick}>Contato</Link></Button>
+                <Button variant="ghost" className="w-full justify-start" asChild><Link href="/calendario" onClick={handleMenuClick}>Calendário</Link></Button>
               </div>
             </SheetContent>
           </Sheet>

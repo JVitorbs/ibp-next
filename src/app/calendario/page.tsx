@@ -1,5 +1,6 @@
 "use client";
 import dayGridPlugin from '@fullcalendar/daygrid';
+import listPlugin from '@fullcalendar/list';
 import multiMonthPlugin from '@fullcalendar/multimonth';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import { EventClickArg } from '@fullcalendar/core';
@@ -136,10 +137,23 @@ const CalendarPage = () => {
   const [isClient, setIsClient] = useState(false);
   useEffect(() => { setIsClient(true); }, []);
 
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    if (typeof window.matchMedia !== 'function') return;
+
+    const mediaQuery = window.matchMedia('(max-width: 1023px)');
+    const updateViewport = () => setIsMobile(mediaQuery.matches);
+
+    updateViewport();
+    mediaQuery.addEventListener('change', updateViewport);
+    return () => mediaQuery.removeEventListener('change', updateViewport);
+  }, []);
+
   // Memoiza eventos para evitar recomputação
   const memoAllEvents = useMemo(() => allEvents, []);
 
   const [open, setOpen] = useState(false);
+  const [showPanorama, setShowPanorama] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedEvents, setSelectedEvents] = useState<CalendarEvent[]>([]);
 
@@ -183,7 +197,7 @@ const CalendarPage = () => {
   }
 
   return (
-    <div className="flex flex-col gap-8 p-8 bg-primary/30">
+    <main id="main-content" className={`flex flex-col gap-8 bg-primary/30 ${isMobile ? 'p-4' : 'p-8'}`}>
       {isClient && (
         <>
           <CalendarReveal direction="up">
@@ -197,7 +211,7 @@ const CalendarPage = () => {
             {/* Mês atual */}
             <section>
               <h2 className="text-2xl font-bold mb-4">Calendário - Mês Atual</h2>
-              <Card className="rounded-3xl border p-4 min-h-130 shadow-2xl">
+              <Card className={`rounded-3xl border shadow-2xl ${isMobile ? 'p-3 min-h-0' : 'p-4 min-h-130'}`}>
                 <style>{`
                   .fc-header-toolbar {
                     display: flex;
@@ -229,11 +243,11 @@ const CalendarPage = () => {
                   }
                 `}</style>
                 <FullCalendar
-                  plugins={[dayGridPlugin, interactionPlugin]}
-                  initialView="dayGridMonth"
+                  plugins={[dayGridPlugin, listPlugin, interactionPlugin]}
+                  initialView={isMobile ? 'listMonth' : 'dayGridMonth'}
                   locale="pt-br"
-                  height={480}
-                  contentHeight={480}
+                  height={isMobile ? 'auto' : 480}
+                  contentHeight={isMobile ? 'auto' : 480}
                   headerToolbar={{
                     left: 'prev,next today',
                     center: '',
@@ -293,41 +307,54 @@ const CalendarPage = () => {
               </div>
             </div>
           </CalendarReveal>
-          <CalendarReveal direction="up" delay={400}>
-            {/* Panorama geral */}
-            <section>
-              <h2 className="text-xl font-semibold mb-4">Panorama Geral dos Meses</h2>
-              <div id="calendar-panorama" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {[...Array(12)].map((_, i) => (
-                  <Card key={i} className="rounded-3xl border p-4 shadow-2xl">
-                    <FullCalendar
-                      plugins={[dayGridPlugin, interactionPlugin]}
-                      initialView="dayGridMonth"
-                      locale="pt-br"
-                      height={350}
-                      headerToolbar={false}
-                      events={memoAllEvents}
-                      initialDate={`2026-${String(i+1).padStart(2, '0')}-01`}
-                      dayMaxEventRows={3}
-                      eventClick={handleEventClick}
-                      dateClick={handleDateClick}
-                      dayCellClassNames={(arg) => (
-                        selectedDate && toDateKey(arg.date) === selectedDate
-                          ? ['ibp-selected-day']
-                          : []
-                      )}
-                    />
-                    <div className="text-center font-semibold mt-2">
-                      {new Date(2026, i).toLocaleString('pt-BR', { month: 'long' }).toUpperCase()}
-                    </div>
-                  </Card>
-                ))}
-              </div>
-            </section>
-          </CalendarReveal>
+           {!isMobile && (
+             <CalendarReveal direction="up" delay={400}>
+               <button
+                 type="button"
+                 className="mx-auto block rounded-full border border-primary/30 bg-background px-5 py-2 text-sm font-medium text-primary transition hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                 aria-expanded={showPanorama}
+                 aria-controls="calendar-panorama"
+                 onClick={() => setShowPanorama((visible) => !visible)}
+               >
+                 {showPanorama ? 'Ocultar panorama anual' : 'Ver panorama anual'}
+               </button>
+
+               {showPanorama && (
+                 <section className="mt-8">
+                   <h2 className="text-xl font-semibold mb-4">Panorama Geral dos Meses</h2>
+                   <div id="calendar-panorama" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                     {[...Array(12)].map((_, i) => (
+                       <Card key={i} className="rounded-3xl border p-4 shadow-2xl">
+                         <FullCalendar
+                           plugins={[dayGridPlugin, interactionPlugin]}
+                           initialView="dayGridMonth"
+                           locale="pt-br"
+                           height={350}
+                           headerToolbar={false}
+                           events={memoAllEvents}
+                           initialDate={`2026-${String(i+1).padStart(2, '0')}-01`}
+                           dayMaxEventRows={3}
+                           eventClick={handleEventClick}
+                           dateClick={handleDateClick}
+                           dayCellClassNames={(arg) => (
+                             selectedDate && toDateKey(arg.date) === selectedDate
+                               ? ['ibp-selected-day']
+                               : []
+                           )}
+                         />
+                         <div className="text-center font-semibold mt-2">
+                           {new Date(2026, i).toLocaleString('pt-BR', { month: 'long' }).toUpperCase()}
+                         </div>
+                       </Card>
+                     ))}
+                   </div>
+                 </section>
+               )}
+             </CalendarReveal>
+           )}
         </>
       )}
-    </div>
+    </main>
   );
 };
 

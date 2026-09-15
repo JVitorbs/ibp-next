@@ -4,12 +4,12 @@ import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Pequenos Grupos - IBP",
-  description: "Pequenos Grupos da Igreja Batista do Planalto",
+  description: "Pequenos Grupos da Igreja Batista do Pirangi",
 };
 
 export default function PGPage() {
   return (
-    <main className="min-h-screen">
+    <main id="main-content" className="min-h-screen">
       <section className="py-20 px-4 bg-primary/20 from-background to-muted/20">
         <div className="max-w-4xl mx-auto">
           <ScrollReveal direction="up">

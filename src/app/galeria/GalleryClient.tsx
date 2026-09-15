@@ -249,7 +249,7 @@ export default function GalleryClient({ images }: { images: string[] }) {
   }
 
   return (
-    <div className="p-4">
+    <main id="main-content" className="p-4">
       <h1 className="text-3xl font-bold mb-6 text-center">Galeria de Fotos</h1>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {images.map((img, index) => (
@@ -409,6 +409,6 @@ export default function GalleryClient({ images }: { images: string[] }) {
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>
-    </div>
+    </main>
   );
 }
