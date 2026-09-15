@@ -4,12 +4,12 @@ import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Instituto Bíblico - IBP",
-  description: "Escola Bíblica Dominical da Igreja Batista do Planalto",
+  description: "Escola Bíblica Dominical da Igreja Batista do Pirangi",
 };
 
 export default function InstitutoBiblicoPage() {
   return (
-    <main className="min-h-screen">
+    <main id="main-content" className="min-h-screen">
       <section className="py-20 px-4 bg-primary/20 from-background to-muted/20">
         <div className="max-w-4xl mx-auto">
           <ScrollReveal direction="up">

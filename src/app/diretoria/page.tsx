@@ -3,6 +3,12 @@ import { ScrollReveal } from "@/components/ScrollReveal";
 import { readdir } from "node:fs/promises";
 import path from "node:path";
 import { getInitials, getLinhaHorizontalWidth, getMemberKey } from "./utils";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Diretoria - IBP",
+  description: "Conheça a liderança e os ministérios da Igreja Batista do Pirangi.",
+};
 
 interface Diretor {
   role: string;
@@ -189,6 +195,7 @@ export default async function DiretoriaPage() {
 
   return (
     <main
+      id="main-content"
       className="min-h-screen pt-6 px-4 pb-20 relative bg-primary/40"
       style={{
         backgroundImage: "url('/images/paper-texture.jpeg')",
