@@ -83,7 +83,7 @@ export function Carousel({
     );
 
   return (
-    <div className="relative h-72 overflow-hidden bg-black/10">
+    <div className="relative h-72 md:h-80 overflow-hidden bg-black/10">
       <div className="h-full overflow-hidden" ref={emblaRef}>
         <div className="flex h-full touch-pan-y">
           {images.map((_, idx) => (

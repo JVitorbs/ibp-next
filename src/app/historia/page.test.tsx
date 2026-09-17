@@ -34,13 +34,14 @@ describe('Historia', () => {
     expect(screen.getByText('Crescimento e Consolidação')).toBeTruthy();
     expect(screen.getByText('Início da Expansão')).toBeTruthy();
     expect(screen.getByText('30 Anos de História')).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Batismos 2026' })).toBeTruthy();
   });
 
   it('renders event years', () => {
     render(<Historia />);
     expect(screen.getByText('1990')).toBeTruthy();
     expect(screen.getByText('2011')).toBeTruthy();
-    expect(screen.getByText('2026')).toBeTruthy();
+    expect(screen.getAllByText('2026')).toHaveLength(2);
   });
 
   it('renders carousel for multi-image events', () => {

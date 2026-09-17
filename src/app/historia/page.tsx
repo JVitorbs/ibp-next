@@ -203,6 +203,23 @@ export default function Historia() {
         "/images/historia/IMG_6344.jpg",
       ],
     },
+    {
+      year: "2026",
+      title: "Batismos 2026",
+      description: "Celebração de batismos realizada no domingo, 6 de setembro de 2026, marcando a fé e o compromisso dos novos membros.",
+      type: "achievement",
+      images: [
+        "/images/galeria/batismo_2026-09-06_01.png",
+        "/images/galeria/batismo_2026-09-06_02.png",
+        "/images/galeria/batismo_2026-09-06_03.png",
+        "/images/galeria/batismo_2026-09-06_04.png",
+        "/images/galeria/batismo_2026-09-06_05.png",
+        "/images/galeria/batismo_2026-09-06_06.jpg",
+        "/images/galeria/batismo_2026-09-06_07.jpg",
+        "/images/galeria/batismo_2026-09-06_08.jpg",
+        "/images/galeria/batismo_2026-09-06_09.jpg",
+      ],
+    },
   ];
 
   return (
@@ -277,7 +294,7 @@ export default function Historia() {
                       {event.images && event.images.length > 0 ? (
                         <Carousel images={event.images} alt={event.title} fallbackBg={getEventColor(event.type)} fallbackIcon={getEventIcon(event.type)} />
                       ) : event.image ? (
-                        <div className="relative h-72 overflow-hidden">
+                        <div className="relative h-72 md:h-80 overflow-hidden">
                           <img
                             src={event.image}
                             alt={event.title}
